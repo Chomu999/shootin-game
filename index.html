@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>canvas bird game</title>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+}
+
+#mainBox{
+margin:0;padding:0;
+background-color:#CBCBCB;
+}
+#miniBox{
+
+}
+
+canvas{
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+border:2px solid blue;
+}
+
+pre{
+color:red;
+text-transform:capitalize;
+}
+
+p{
+padding:20px 20px;
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+border:2px solid blue;
+text-transform:capitalize;
+color:purple;
+font-size:20px;
+
+}
+
+
+#btnBox{
+width:100vw;height:100vh;
+position:absolute;
+/* top:50%; */
+display:grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: repeat(3, 1fr);
+grid-gap:10px;
+
+}
+
+.left{
+
+grid-column:1/2;
+grid-row:1/4;
+
+}
+.right{
+
+grid-column:2/3;
+grid-row:1/4;
+}
+
+.btns{
+/* background:#CF00FF;
+outline:1px solid #CF00FF;
+ */
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="mainBox">
+
+<!-- <progress value="8" max="10"></progress> -->
+
+
+<div id="miniBox">
+<pre>hello world</pre>
+<canvas id="cvs"></canvas>
+
+<div id="btnBox">
+<div class="btns left"></div>
+<div class="btns right"></div>
+</div>
+
+</div>
+
+
+<p class="startGame">tap to play</p>
+
+
+</div>
+
+<script src="./js/info.js"></script>
+<script src="./js/customFun.js"></script>
+<script src="./js/controll.js"></script>
+<script src="./js/main.js"></script>
+
+</body>
+</html>
