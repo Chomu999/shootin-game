@@ -1,6 +1,6 @@
-const player = new NewBox(160,500,20,20, 'red',10)
+const player = new NewBox(160,0,20,20, 'red',10)
 
-const scapeBlock = new NewBox(20,640,cvs.width,2, '#FF9000')
+const homeBlock = new NewBox(0,640,cvs.width*2,60, '#FF9000')
 
 
 
@@ -110,7 +110,7 @@ ctx.fillRect(0,0,cvs.width,cvs.height)
 
 
 player.update();
-
+player.y=playerY
 
 if(movin.left && !movin.right){
 player.speed.x = -movin.speed;
@@ -128,7 +128,7 @@ player.speed.x = 0;
 
 
 
-handleParlicles();
+handlePlayerParlicles(player.x, player.x + player.width ,player.y + player.height);
 
 //enemies function
 
@@ -142,12 +142,16 @@ arrows.forEach((arrow)=>{
 
 arrow.speed.y = -4.80
 arrow.update();
+
 })
 
+if(arrows.length >= 60)arrows.pop()
 
 
 
-scapeBlock.update()
+
+homeBlock.update()
+homeBlock.y = homeY
 
 
 
@@ -163,18 +167,52 @@ scapeBlock.update()
 
 enemies.forEach((enemy, index)=>{
 
+handleEnemiesParlicles(enemy.x+enemy.width/1.8, enemy.x+enemy.width/1.8 ,enemy.y);
 
-if(IScollision(enemy,scapeBlock)){
+if(IScollision(enemy,homeBlock)){
+
+if(!player.losin){
+
+player.losin=true
+player.health--
+setTimeout(()=>{
+player.losin=false
+
+},4000);
+
+}
+
+
 EnemiesIsScapeCount++
 
 allINFO[0].score--
 enemies.splice(index, 1);
+enemiesParlicles.pop(enemiesParlicles.length)
+}
+
+
+if(IScollision(enemy,player)){
+
+
+if(!player.losin){
+
+player.losin=true
+player.health--
+setTimeout(()=>{
+player.losin=false
+
+},4000);
+
+}
+
+//ctx =cvs.getContext('webgl2')
+//body.removeChild(cvs)
 }
 
 
 arrows.forEach((arrow, arrowIndex)=>{
 
-if(IScollision(arrow,enemy)){
+if(IScollision(enemy,arrow)){
 
 setTimeout(()=>{
 
@@ -183,6 +221,8 @@ arrows.splice(arrowIndex, 1);
 enemies.splice(index, 1);
 
 allINFO[0].score+=1;
+
+enemiesParlicles.pop(enemiesParlicles.length)
 
 
 //localStorage setup
@@ -270,6 +310,13 @@ levelCount++
 
 
 
+//if player.health == 0 will gameOver
+
+if(player.health <= 0 && player.losin){
+
+}
+
+
 
 
 //fes
@@ -281,7 +328,7 @@ levelCount++
 hue+=0.9
 //sorce and display
 
-pre.innerHTML=`score : ${allINFO[0].score} || Level:${levelCount +1},
+pre.innerHTML=`score : ${allINFO[0].score} || Level:${levelCount +1}, Health: ${player.health}
 Kill Traget: ${swpanEnemiesCount[levelCount].level} || enemies scape : ${EnemiesIsScapeCount}
 hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
@@ -297,7 +344,9 @@ hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
 
 
-gameLoop()
+
+
+    gameLoop()
 
 
 
