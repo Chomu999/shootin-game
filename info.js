@@ -17,7 +17,7 @@ let ctx = cvs.getContext("2d");
 
 
 
-let btnBox,btnLeft,btnRight;
+let btnBox,btnLeft,btnRight,mainloopFun;
 
 
 
@@ -40,7 +40,8 @@ btnRight=document.querySelector('.right');
 
 let gameSpeed=2;
 
-let parlicles=[];
+let playerParlicles=[];
+let enemiesParlicles=[];
 let enemies=[];
 let arrows=[];
 
@@ -79,6 +80,7 @@ enemySwpanRate:0,
 
 
 let playerY=0;
+let homeY=0;
 let mainHI=undefined;
 let levelCount=0;
 let EnemiesIsScapeCount=0;
