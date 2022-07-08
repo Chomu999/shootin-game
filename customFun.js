@@ -10,6 +10,7 @@ this.color=color;
 this.width=width;
 this.height=height;
 this.speed={x:0,y:0};
+this.losin=false;
 this.health=health;
 }
 draw(){
@@ -70,9 +71,9 @@ ctx.fill();
 update(){
     
 this.draw()
-this.y += gameSpeed;
+//this.y += gameSpeed;
 //this.speed.y -= this.weight
-this.y += this.speed.y;
+//this.y += this.speed.y;
 
 
 
@@ -143,19 +144,43 @@ this.y += this.speed.y;
 
 
 
-function handleParlicles(){
+function handlePlayerParlicles(left,right,y){
 
-parlicles.unshift(new Parlicle(player.x, player.x + player.width ,player.y + player.height));
+playerParlicles.unshift(new Parlicle(left,right,y));
 
-parlicles.forEach((parlicle)=>{
+playerParlicles.forEach((parlicle)=>{
 
 parlicle.update();
+parlicle.y += gameSpeed;
 
 })
 
-if(parlicles.length > 19)parlicles.pop();
+if(playerParlicles.length > 19)playerParlicles.pop();
 
 }
+
+
+
+function handleEnemiesParlicles(left,right,y){
+
+enemiesParlicles.unshift(new Parlicle(left,right,y));
+
+enemiesParlicles.forEach((parlicle)=>{
+
+parlicle.update();
+parlicle.y -= gameSpeed;
+
+})
+
+if(enemiesParlicles.length > 19)enemiesParlicles.pop();
+
+}
+
+
+
+
+
+
 
 //handleParlicles()
 
@@ -260,10 +285,14 @@ fh= mh/100;
 if(mw <= mh){
 cvs.width= fw*90;
 cvs.height= fh*85;
+playerY=500;
+homeY=560;
 }else{
 
 cvs.width= fw*60;
 cvs.height= fh*90;
+playerY=220;
+homeY=250;
 }
 
 }
