@@ -52,9 +52,8 @@ this.right=right;
 
 this.y=y;
 this.size=randint(1,4);
-this.colorAlpha=randint(10,99);
+this.colorAlpha=randint(1,999);
 this.color=`rgba(255,255,255,0.${this.colorAlpha}`;
-this.weight=0.06;
 this.speed={x:0,y:0};
 }
 draw(){
@@ -68,6 +67,7 @@ ctx.arc(this.right,this.y,this.size,0,Math.PI * 2);
 
 ctx.fill();
 }
+
 update(){
     
 this.draw()
@@ -77,9 +77,7 @@ this.draw()
 
 
 
-if(this.size >= 0.3){
-this.size += 0.14;
-}
+if(this.size >= 0.3){ this.size += 0.14}
 
 }
 
@@ -95,9 +93,9 @@ this.x=x
 this.y=y
 this.width=size;
 this.height=size;
-this.color=color
-this.speed={x:0,y:0}
-this.damege=10
+this.color=color;
+this.speed={x:0,y:0};
+this.damege=10;
 }
 
 draw(){
@@ -109,6 +107,8 @@ ctx.fill();
 ctx.strokeStyle='#00FF46';
 ctx.stroke();
 }
+
+
 update(){
 this.draw();
 
@@ -149,13 +149,13 @@ function handlePlayerParlicles(left,right,y){
 playerParlicles.unshift(new Parlicle(left,right,y));
 
 playerParlicles.forEach((parlicle)=>{
-
+//ctx.fillStyle='rgba(255,175,55,1)'
 parlicle.update();
 parlicle.y += gameSpeed;
 
 })
 
-if(playerParlicles.length > 19)playerParlicles.pop();
+if(playerParlicles.length > 16){ playerParlicles.pop()}
 
 }
 
@@ -166,13 +166,13 @@ function handleEnemiesParlicles(left,right,y){
 enemiesParlicles.unshift(new Parlicle(left,right,y));
 
 enemiesParlicles.forEach((parlicle)=>{
-
+//ctx.fillStyle='rgba(255,175,55,1)'
 parlicle.update();
 parlicle.y -= gameSpeed;
 
 })
 
-if(enemiesParlicles.length > 19)enemiesParlicles.pop();
+if(enemiesParlicles.length > 9){ enemiesParlicles.pop() }
 
 }
 
@@ -193,15 +193,16 @@ let health=3;
 
 let x=randint(player.width*2,cvs.width - player.width)
 
-enemies.unshift(new NewBox(x, -player.height,player.width,player.height,'#FF00D6',health));
+enemies.unshift(new NewBox(x, -player.height,player.width,player.height,`hsl(${randint(0,4000)},100%,50%,1)`,health));
 CurrSwpanEnemiesCount++;
+
 }
 
 
 //fire fun
 
 
-const fire=()=>{
+function fire(){
 arrows.unshift(new Arrow(
     player.x + player.width/2 -2,
     player.y,3,'blue'
@@ -209,13 +210,29 @@ arrows.unshift(new Arrow(
 }
 
 
-
-let swpanEnemiesFun = setInterval(swpanEnemies, 1*EnemiesSwpanSpeed);
-
+setInterval(swpanStars, 2*1000)
 
 
 
+setInterval(swpanEnemies, 1*EnemiesSwpanSpeed);
 
+
+function swpanStars(){
+
+let r=randint(10,30)
+
+for(let i=0;i < r;i++){
+let gap=randint(-5,-20)
+
+let x=randint(0,cvs.width -gap)
+let y=randint(0, -cvs.height)
+let size=randint(2,player.width/2)
+
+//stars.unshift(new NewBox(x,y,size,size,`rgba(255,255,255,0.${randint(001,999)})`,0));
+stars.unshift(new NewBox(x+gap,y+gap,size,size,'#E1FFF9'));
+}
+
+}
 
 
 
@@ -287,12 +304,34 @@ cvs.width= fw*90;
 cvs.height= fh*85;
 playerY=500;
 homeY=560;
+
+
+
+crr.canvas.width = cvs.width;
+crr.canvas.height = cvs.height;
+
+
+
+crr.distroyY= cvs.height*1 + 60;
+crr.playerY= cvs.height/100 * 90;
+crr.homeY= cvs.height/100 * 100;
+
 }else{
 
 cvs.width= fw*60;
 cvs.height= fh*90;
-playerY=220;
-homeY=250;
+
+
+//playerY=220;
+//homeY=250;
+
+crr.canvas.width = cvs.width;
+crr.canvas.height = cvs.height;
+
+crr.distroyY= cvs.height*1 + 60;
+crr.playerY= cvs.height/100 * 80;
+crr.homeY= cvs.height/100 * 100;
+
 }
 
 }
