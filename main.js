@@ -1,6 +1,16 @@
 const player = new NewBox(160,0,20,20, 'red',10)
 
-const homeBlock = new NewBox(0,640,cvs.width*2,60, '#FF9000')
+//const homeBlock = new NewBox(0,0,cvs.width*2,6,'#FF9000',100)
+
+
+const LeftBlock = new NewBox(-30,0,2,crr.canvas.height,'#CBFF00',3)
+
+
+const RightBlock = new NewBox(cvs.width+30,0,2,crr.canvas.height,'#CBFF00',2)
+
+
+const DistroyBlock=new NewBox(0,0,crr.canvas.width,2,'#FF0071',2)
+
 
 
 
@@ -106,11 +116,30 @@ ctx.fillRect(0,0,cvs.width,cvs.height)
 
 
 
+//
 
+stars.forEach((star,i)=>{
+
+star.update();
+star.speed.y = 0.8
+
+
+if(IScollision(star,DistroyBlock)){
+if(i > -1){ stars.splice(i,1)}
+}
+
+
+})
+
+
+
+
+
+//controlin code here
 
 
 player.update();
-player.y=playerY
+player.y = crr.playerY;
 
 if(movin.left && !movin.right){
 player.speed.x = -movin.speed;
@@ -128,14 +157,11 @@ player.speed.x = 0;
 
 
 
-handlePlayerParlicles(player.x, player.x + player.width ,player.y + player.height);
+handlePlayerParlicles(player.x, player.x + player.width,player.y + player.height)
 
 //enemies function
 
-enemies.forEach((enemy)=>{
-enemy.speed.y = 1.8
-enemy.update();
-})
+
 
 
 arrows.forEach((arrow)=>{
@@ -150,8 +176,52 @@ if(arrows.length >= 60)arrows.pop()
 
 
 
-homeBlock.update()
-homeBlock.y = homeY
+
+
+
+//homeBlock.update()
+//homeBlock.width=crr.canvas.width;
+//homeBlock.y = crr.homeY;
+
+
+
+
+LeftBlock.update()
+RightBlock.update()
+DistroyBlock.update()
+
+
+
+LeftBlock.height=crr.canvas.height;
+LeftBlock.x= -50;
+
+
+RightBlock.height=crr.canvas.height;
+RightBlock.x=crr.canvas.width+30;
+
+
+
+DistroyBlock.width=crr.canvas.width;
+///DistroyBlock.x=0;
+DistroyBlock.y = crr.distroyY;
+
+
+//
+
+if(IScollision(player,LeftBlock)){
+player.x = crr.canvas.width-10;
+}
+
+
+if(IScollision(player,RightBlock)){
+player.x = -10;
+}
+
+
+
+
+
+
 
 
 
@@ -167,9 +237,18 @@ homeBlock.y = homeY
 
 enemies.forEach((enemy, index)=>{
 
+enemy.update();
+enemy.speed.y = 1.8;
+
 handleEnemiesParlicles(enemy.x+enemy.width/1.8, enemy.x+enemy.width/1.8 ,enemy.y);
 
-if(IScollision(enemy,homeBlock)){
+
+
+
+
+
+if(IScollision(enemy,player) || IScollision(enemy,DistroyBlock)){
+console.log('enemies has Distroy');
 
 if(!player.losin){
 
@@ -177,36 +256,22 @@ player.losin=true
 player.health--
 setTimeout(()=>{
 player.losin=false
-
-},4000);
+},1500);
 
 }
 
 
-EnemiesIsScapeCount++
 
-allINFO[0].score--
+
+EnemiesIsScapeCount++;
+
+allINFO[0].score--;
+
+if(index > -1){
 enemies.splice(index, 1);
 enemiesParlicles.pop(enemiesParlicles.length)
 }
 
-
-if(IScollision(enemy,player)){
-
-
-if(!player.losin){
-
-player.losin=true
-player.health--
-setTimeout(()=>{
-player.losin=false
-
-},4000);
-
-}
-
-//ctx =cvs.getContext('webgl2')
-//body.removeChild(cvs)
 }
 
 
@@ -216,6 +281,7 @@ if(IScollision(enemy,arrow)){
 
 setTimeout(()=>{
 
+if(index > -1 && arrowIndex > -1){
 arrows.splice(arrowIndex, 1);
 
 enemies.splice(index, 1);
@@ -223,7 +289,6 @@ enemies.splice(index, 1);
 allINFO[0].score+=1;
 
 enemiesParlicles.pop(enemiesParlicles.length)
-
 
 //localStorage setup
 
@@ -234,11 +299,11 @@ localStorage.setItem("hiscore", JSON.stringify(hhiscore))
 
 
 }
+}
 
 
 
-
-},1.9)
+},30)
 
 }
 
@@ -315,6 +380,12 @@ levelCount++
 if(player.health <= 0 && player.losin){
 
 }
+
+
+
+
+
+//if(stars.length >= 600) stars.pop()
 
 
 
