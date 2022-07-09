@@ -43,6 +43,7 @@ let gameSpeed=2;
 let playerParlicles=[];
 let enemiesParlicles=[];
 let enemies=[];
+let stars=[];
 let arrows=[];
 
 
@@ -67,7 +68,7 @@ let allINFO=[
 {
 enemyKillTraget:0,
 score:0,
-enemySwpanRate:0,
+enemySwpanRate:0
 
 }
 
@@ -78,9 +79,19 @@ enemySwpanRate:0,
 ];
 
 
+let crr={
 
-let playerY=0;
-let homeY=0;
+canvas:{
+width:0,
+height:0
+},
+distroyY:0,
+playerY:0,
+homeY:0
+
+}
+
+
 let mainHI=undefined;
 let levelCount=0;
 let EnemiesIsScapeCount=0;
@@ -104,7 +115,7 @@ top:false,
 left:false,
 right:false,
 down:false,
-speed:2.6,
+speed:3.6,
 }
 
 
