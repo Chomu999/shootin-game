@@ -2,13 +2,14 @@
 
 
 class NewBox{
-constructor(x,y,width,height,color,health){
+constructor(x,y,size,color='rgba(0,0,0,0.0001)',health=1){
 
 this.x=x;
 this.y=y;
+this.size=size;
 this.color=color;
-this.width=width;
-this.height=height;
+this.width=this.size;
+this.height=this.size;
 this.speed={x:0,y:0};
 this.losin=false;
 this.health=health;
@@ -35,6 +36,90 @@ this.y += this.speed.y;
 
 
 }
+
+
+
+
+class NewShip{
+constructor(x,y,radius,color='rgba(0,0,0,0)',health=1){
+
+this.x=x;
+this.y=y;
+this.radius=radius;
+this.color=color;
+this.speed={x:0,y:0};
+this.losin=false;
+this.health=health;
+}
+draw(){
+ctx.beginPath()
+//ctx.fillStyle=this.color;
+ctx.strokeStyle=this.color;
+ctx.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
+//ctx.fill()
+ctx.stroke()
+ctx.closePath()
+
+
+}
+
+
+
+
+update(){
+this.draw();
+
+this.x += this.speed.x;
+this.y += this.speed.y;
+
+
+
+}
+
+
+}
+
+
+
+class NewShipFill{
+constructor(x,y,radius,color='rgba(0,0,0,0)',health=1){
+
+this.x=x;
+this.y=y;
+this.radius=radius;
+this.color=color;
+this.speed={x:0,y:0};
+this.losin=false;
+this.health=health;
+}
+draw(){
+ctx.beginPath()
+ctx.fillStyle=this.color;
+ctx.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
+ctx.fill()
+ctx.closePath()
+
+
+}
+
+
+
+
+update(){
+this.draw();
+
+this.x += this.speed.x;
+this.y += this.speed.y;
+
+
+
+}
+
+
+}
+
+
+
 
 
 
@@ -73,7 +158,7 @@ update(){
 this.draw()
 //this.y += gameSpeed;
 //this.speed.y -= this.weight
-//this.y += this.speed.y;
+this.x += this.speed.x
 
 
 
@@ -88,37 +173,48 @@ if(this.size >= 0.3){ this.size += 0.14}
 
 
 class Arrow{
-constructor(x,y,size,color){
+constructor(x,y,color){
 this.x=x
 this.y=y
-this.width=size;
-this.height=size;
-this.color=color;
-this.speed={x:0,y:0};
-this.damege=10;
+this.color=color
+this.size=randint(2,10)
+this.speed={x:Math.random() * 3 - 1.5 ,y:Math.random() * 3 - 1.5}
 }
-
 draw(){
-ctx.beginPath();
-ctx.fillStyle=this.color;
-ctx.fillRect(this.x,this.y,this.width,this.height);
-ctx.fill();
-//ctx.lineWidth='40px';
-ctx.strokeStyle='#00FF46';
-ctx.stroke();
-}
 
+ctx.beginPath();
+//ctx.fillStyle=this.color;
+ctx.strokeStyle=this.color;
+ctx.arc(this.x,this.y,this.size,45,Math.PI * 2,false)
+//ctx.fill()
+ctx.stroke()
+
+ctx.closePath();
+}
 
 update(){
-this.draw();
+this.draw()
 
-this.x += this.speed.x;
-this.y += this.speed.y;
+this.x += this.speed.x
+this.y += this.speed.y
+
+
+if(this.size > 0.3){
+this.size -= 0.1;
+}
+
+}
 
 
 }
 
+function arrowsAdds(x,y,color){
+
+for(let i=0;i<randint(10,19);i++){
+exposions.push(new Arrow(x,y,color))
 }
+}
+
 
 
 
@@ -161,20 +257,11 @@ if(playerParlicles.length > 16){ playerParlicles.pop()}
 
 
 
-function handleEnemiesParlicles(left,right,y){
+//function handleEnemiesParlicles(left,right,y){
 
-enemiesParlicles.unshift(new Parlicle(left,right,y));
+//enemiesParlicles.unshift(new Parlicle(left,right,y));
 
-enemiesParlicles.forEach((parlicle)=>{
-//ctx.fillStyle='rgba(255,175,55,1)'
-parlicle.update();
-parlicle.y -= gameSpeed;
-
-})
-
-if(enemiesParlicles.length > 9){ enemiesParlicles.pop() }
-
-}
+//}
 
 
 
@@ -191,9 +278,25 @@ function swpanEnemies(){
 
 let health=3;
 
-let x=randint(player.width*2,cvs.width - player.width)
+let size = randint(9,30)
 
-enemies.unshift(new NewBox(x, -player.height,player.width,player.height,`hsl(${randint(0,4000)},100%,50%,1)`,health));
+let x = randint(size,cvs.width -size);
+
+enemies.unshift(new NewShip(x, -player.radius,size,`hsl(${randint(0,360)},100%,50%,1)`,health));
+
+
+
+
+
+
+//enemies[CurrSwpanEnemiesCount].x=x
+
+//enemies.forEach((enemy, i)=>{
+
+//})
+
+
+
 CurrSwpanEnemiesCount++;
 
 }
@@ -203,34 +306,32 @@ CurrSwpanEnemiesCount++;
 
 
 function fire(){
-arrows.unshift(new Arrow(
-    player.x + player.width/2 -2,
-    player.y,3,'blue'
+arrows.unshift(new NewShip(
+    player.x,
+    player.y,3,'white'
 ))
 }
 
 
-setInterval(swpanStars, 2*1000)
-
-
-
-setInterval(swpanEnemies, 1*EnemiesSwpanSpeed);
 
 
 function swpanStars(){
 
-let r=randint(10,30)
-
-for(let i=0;i < r;i++){
+for(let i=0;i < randint(10,30);i++){
 let gap=randint(-5,-20)
 
 let x=randint(0,cvs.width -gap)
 let y=randint(0, -cvs.height)
-let size=randint(2,player.width/2)
+let size=randint(2,player.radius/2)
 
-//stars.unshift(new NewBox(x,y,size,size,`rgba(255,255,255,0.${randint(001,999)})`,0));
-stars.unshift(new NewBox(x+gap,y+gap,size,size,'#E1FFF9'));
+stars.unshift(new NewShipFill(x+gap,y+gap,size,'rgba(255,255,255,0.2)'));
+
+
+
+
+
 }
+
 
 }
 
@@ -256,12 +357,36 @@ function DrawSpite(img,sX,sY,sW,sH,dX,dY,dW,dH){
 ctx.drawImage(img,sX,sY,sW,sH,dX,dY,dW,dH)
 }
 
+
+
+
+
 function IScollision(ObjectA,ObjectB){
 return (ObjectA.x + ObjectA.width >= ObjectB.x &&
 ObjectA.x <= ObjectB.x + ObjectB.width &&
 ObjectA.y + ObjectA.height >= ObjectB.y &&
 ObjectA.y <= ObjectB.y + ObjectB.height)
 }
+
+
+
+
+
+
+function ISCrucialcollision(ObjectA,ObjectB){
+
+
+let dist=Math.hypot(ObjectA.x - ObjectB.x, ObjectA.y - ObjectB.y)
+
+return (dist - ObjectB.radius - ObjectA.radius < 1)
+
+}
+
+
+
+
+
+
 
 /// console.log();
 function see(see){
@@ -300,15 +425,18 @@ fh= mh/100;
 
 
 if(mw <= mh){
+
 cvs.width= fw*90;
 cvs.height= fh*85;
-playerY=500;
-homeY=560;
+
 
 
 
 crr.canvas.width = cvs.width;
 crr.canvas.height = cvs.height;
+
+crr.canvas.x=cvs.getBoundingClientRect().x
+crr.canvas.y=cvs.getBoundingClientRect().y
 
 
 
@@ -316,21 +444,62 @@ crr.distroyY= cvs.height*1 + 60;
 crr.playerY= cvs.height/100 * 90;
 crr.homeY= cvs.height/100 * 100;
 
+
+MOUSE.y = crr.canvas.height/3 *2;
+
+crr.poartl.leftx= -50;
+crr.poartl.rightx= crr.canvas.width +30;
+
+
+crr.ctx.gap=crr.canvas.width/3;
+crr.ctx.width=crr.canvas.width/3;
+
+
+crr.ctx.left.height = crr.canvas.height;
+crr.ctx.left.x = 0;
+crr.ctx.left.y = 0;
+
+
+crr.ctx.right.height = crr.canvas.height;
+crr.ctx.right.x = crr.ctx.gap*2;
+crr.ctx.right.y = 0;
+
+
+
 }else{
 
 cvs.width= fw*60;
 cvs.height= fh*90;
 
 
-//playerY=220;
-//homeY=250;
-
 crr.canvas.width = cvs.width;
 crr.canvas.height = cvs.height;
+
+crr.canvas.x=cvs.getBoundingClientRect().x
+crr.canvas.y=cvs.getBoundingClientRect().y
+
 
 crr.distroyY= cvs.height*1 + 60;
 crr.playerY= cvs.height/100 * 80;
 crr.homeY= cvs.height/100 * 100;
+
+MOUSE.y = crr.canvas.height/3 *2;
+
+crr.poartl.leftx= -50;
+crr.poartl.rightx= crr.canvas.width +30;
+
+crr.ctx.gap=crr.canvas.width/3;
+crr.ctx.width=crr.canvas.width/3;
+
+crr.ctx.left.height = crr.canvas.height;
+crr.ctx.left.x = 0;
+crr.ctx.left.y = 0;
+
+crr.ctx.right.height = crr.canvas.height;
+crr.ctx.right.x = crr.ctx.gap*2;
+crr.ctx.right.y = 0;
+
+
 
 }
 
