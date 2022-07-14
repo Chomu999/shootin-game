@@ -17,34 +17,23 @@ let ctx = cvs.getContext("2d");
 
 
 
-let btnBox,btnLeft,btnRight,mainloopFun;
+
+let touch=['touchstart','touchmove','touchend','touchcancel'];
+
+let btnBox,btnLeft,btnRight,mainGameLoop;
 
 
+let firing,enemieSwpaning,starSwpaning;
 
-btnBox=document.getElementById('btnBox');
-
-btnLeft=document.querySelector('.left');
-
-btnRight=document.querySelector('.right');
-
-
-
-
-// btnBox=document.createElement('div');
-// btnLeft=document.createElement('div');
-// btnRight=document.createElement('div');
-
-// btnBox.setAttribute('id','btnBox');
-// btnLeft.setAttribute('class','btns left');
-// btnRight.setAttribute('class','btns right');
 
 let gameSpeed=2;
 
 let playerParlicles=[];
-let enemiesParlicles=[];
 let enemies=[];
 let stars=[];
 let arrows=[];
+let booms=[];
+let exposions=[];
 
 
 let swpanEnemiesCount=[
@@ -80,19 +69,53 @@ enemySwpanRate:0
 
 
 let crr={
-
 canvas:{
 width:0,
-height:0
+height:0,
+x:0,
+y:0,
 },
+
+ctx:{
+gap:50,
+width:0,
+
+left:{
+height:0,
+x:0,
+y:0,
+},
+
+right:{
+height:0,
+x:0,
+y:0,
+},
+
+},
+
 distroyY:0,
 playerY:0,
-homeY:0
+homeY:0,
 
-}
+EnemiesParlicle:{
+left:0,
+right:0,
+y:0,
+},
 
 
-let mainHI=undefined;
+poartl:{
+leftx:0,
+rightx:0,
+
+
+},
+
+};
+
+
+//let mainHI=undefined;
 let levelCount=0;
 let EnemiesIsScapeCount=0;
 let LevelUP=false;
@@ -111,43 +134,28 @@ let level=1;
 
 
 let movin={
+goin:false,
 top:false,
 left:false,
 right:false,
 down:false,
 speed:3.6,
-}
+};
 
-
-
-let playerInfo={
-w:20,
-h:20,
-x:cvs.width/2 - 10/2,
-y:cvs.height/2 - 10/2,
-}
-
-
-let cg={
-x:0,
-y:0,
-z:0,
+let MOUSE={
+x:undefined,
+y:undefined,
 }
 
 
 
 
 
-
-let touch=['touchstart','touchmove','touchend'];
-
-
-
+//let iii = cvs.getBoundingClientRect().x;
 
 
 
 //cvs.width=window.innerWidth;
 //cvs.height=window.innerHeight;
-
 
 
