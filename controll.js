@@ -1,113 +1,36 @@
-//
-/*
-addEventListener('deviceorientation',(e)=>{
 
-//deviceorientation
+cvs.addEventListener(touch[0],(e)=>{
 
-let pos={
-x:Math.round(e.beta),
-y:Math.round(e.gamma),
-z:Math.round(e.alpha),
-}
+MOUSE.x = e.touches[0].clientX - crr.canvas.x
 
 
-if(pos.x >= 7){
-movin.left=true
-movin.right=false
-}
-
-else if(pos.x <= -7){
-movin.left=false
-movin.right=true
-}
-
-else{
-movin.left=false
-movin.right=false
-}
-
-cg.x = pos.x;
-cg.y = pos.y;
-cg.z = pos.z;
-
-//see('g')
-
-})
-*/
-
-
-
-
-
-let fireTheBullet = setInterval(fire, 1*fireSpeed);
-
-
-
-
-
-btnLeft.addEventListener(touch[0],()=>{
-
-
-if(!movin.left){
-movin.left=true;
-}
+movin.goin = true;
 
 })
 
 
 
-btnRight.addEventListener(touch[0],()=>{
+cvs.addEventListener(touch[1],(e)=>{
 
 
-if(!movin.right){
-movin.right=true;
-}
+MOUSE.x = e.touches[0].clientX - crr.canvas.x
 
-
-
-})
-
-
-//ygjiekek
-
-
-btnLeft.addEventListener(touch[2],()=>{
-
-
-if(movin.left){
-movin.left=false;
-}
+movin.goin = true;
 
 })
 
 
 
-btnRight.addEventListener(touch[2],()=>{
-
-
-if(movin.right){
-movin.right=false;
-}
-
-
+cvs.addEventListener(touch[2],(e)=>{
+movin.goin = false;
 
 })
-
-
-
-
-//deviceorientation
-
-
-//resize fun
-
-
-
-
-addEventListener('resize',reSize);
-
 
 
 pre.addEventListener('dblclick',()=>{
 miniBox.requestFullscreen()
 })
+
+
+
+addEventListener('resize',reSize);
