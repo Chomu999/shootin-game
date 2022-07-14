@@ -1,15 +1,25 @@
-const player = new NewBox(160,0,20,20, 'red',10)
+const player = new NewShipFill(160,0,20, 'gold',10)
 
 //const homeBlock = new NewBox(0,0,cvs.width*2,6,'#FF9000',100)
 
 
-const LeftBlock = new NewBox(-30,0,2,crr.canvas.height,'#CBFF00',3)
+const LeftBlock = new NewBox(-30,0,2,crr.canvas.height)
 
 
-const RightBlock = new NewBox(cvs.width+30,0,2,crr.canvas.height,'#CBFF00',2)
+const playerBox = new NewBox(160,0,player.radius*2)
+
+const RightBlock = new NewBox(cvs.width+30,0,2,crr.canvas.height)
 
 
-const DistroyBlock=new NewBox(0,0,crr.canvas.width,2,'#FF0071',2)
+const DistroyBlock=new NewShip(cvs.width/2,1400,cvs.width/2,'white')
+
+
+
+const leftPad=new NewBox(0,0,0)
+
+const rightPad=new NewBox(0,0,0)
+
+const mouse=new NewBox(0,0,10)
 
 
 
@@ -86,9 +96,25 @@ startBtn.addEventListener('click',startGame);
 
 function startGame(){
 
+
 reSize()
 
 mainBox.removeChild(startBtn)
+
+
+
+starSwpaning = setInterval(swpanStars, 2*1000)
+
+
+
+enemieSwpaning = setInterval(swpanEnemies, 1*900);
+
+
+
+
+
+firing = setInterval(fire, 1*300);
+
 
 // btnBox.appendChild(btnLeft)
 // btnBox.appendChild(btnRight)
@@ -105,10 +131,9 @@ miniBox.requestFullscreen()
 
 
 
-
 function gameLoop(){
 
-window.requestAnimationFrame(gameLoop)
+mainGameLoop = requestAnimationFrame(gameLoop)
 
 //ctx.clearRect(0,0,cvs.width,cvs.height)
 ctx.fillStyle='rgba(0,0,0,0.18)';
@@ -118,15 +143,32 @@ ctx.fillRect(0,0,cvs.width,cvs.height)
 
 //
 
+
+
+
 stars.forEach((star,i)=>{
 
 star.update();
-star.speed.y = 0.8
+star.speed.y = 0.8;
 
 
-if(IScollision(star,DistroyBlock)){
-if(i > -1){ stars.splice(i,1)}
+})
+
+
+
+stars.forEach((star, i)=>{
+
+
+if(ISCrucialcollision(star,DistroyBlock)){
+
+if(i > -1){
+
+stars.splice(i,1)
+
 }
+
+}
+
 
 
 })
@@ -135,11 +177,52 @@ if(i > -1){ stars.splice(i,1)}
 
 
 
+
+
+leftPad.update();
+
+leftPad.width= crr.ctx.width;
+leftPad.height= crr.ctx.left.height;
+leftPad.x= crr.ctx.left.x;
+leftPad.y= crr.ctx.left.y;
+
+
+rightPad.update()
+
+rightPad.width= crr.ctx.width;
+rightPad.height= crr.ctx.right.height;
+rightPad.x= crr.ctx.right.x;
+rightPad.y= crr.ctx.right.y;
+
+
+//
+
+mouse.update()
+
+mouse.x = MOUSE.x;
+mouse.y = MOUSE.y;
+
+
+
+
+
 //controlin code here
 
+//update the playerBox
+playerBox.update()
 
+//update the player
 player.update();
 player.y = crr.playerY;
+
+
+//moving between m0ve player as playerBox
+playerBox.x = player.x -player.radius;
+playerBox.y = player.y -player.radius;
+
+
+
+//achayl moving function
 
 if(movin.left && !movin.right){
 player.speed.x = -movin.speed;
@@ -157,7 +240,6 @@ player.speed.x = 0;
 
 
 
-handlePlayerParlicles(player.x, player.x + player.width,player.y + player.height)
 
 //enemies function
 
@@ -166,7 +248,7 @@ handlePlayerParlicles(player.x, player.x + player.width,player.y + player.height
 
 arrows.forEach((arrow)=>{
 
-arrow.speed.y = -4.80
+arrow.speed.y = -3.80
 arrow.update();
 
 })
@@ -179,11 +261,6 @@ if(arrows.length >= 60)arrows.pop()
 
 
 
-//homeBlock.update()
-//homeBlock.width=crr.canvas.width;
-//homeBlock.y = crr.homeY;
-
-
 
 
 LeftBlock.update()
@@ -193,37 +270,120 @@ DistroyBlock.update()
 
 
 LeftBlock.height=crr.canvas.height;
-LeftBlock.x= -50;
+LeftBlock.x= crr.poartl.leftx;
 
 
 RightBlock.height=crr.canvas.height;
-RightBlock.x=crr.canvas.width+30;
+RightBlock.x=crr.poartl.rightx;
 
 
 
-DistroyBlock.width=crr.canvas.width;
-///DistroyBlock.x=0;
-DistroyBlock.y = crr.distroyY;
-
-
-//
-
-if(IScollision(player,LeftBlock)){
-player.x = crr.canvas.width-10;
+if(IScollision(playerBox,LeftBlock)){
+player.x = crr.canvas.width -10;
 }
 
 
-if(IScollision(player,RightBlock)){
+if(IScollision(playerBox,RightBlock)){
 player.x = -10;
 }
 
 
 
 
+DistroyBlock.radius=crr.canvas.width/2;
+DistroyBlock.x=crr.canvas.width/2;
+DistroyBlock.y=crr.canvas.height*2;
 
 
 
 
+
+
+//update the enemiesBoxs
+
+
+//update the enemies
+
+enemies.forEach((enemy, i)=>{
+enemy.update();
+enemy.speed.y = 2.4;
+})
+
+exposions.forEach((epols, i)=>{
+epols.update();
+//enemy.speed.y = 2.4;
+
+
+if(epols.size <= 1){
+exposions.splice(i, 1)}
+
+})
+
+
+
+
+
+
+
+enemies.forEach((enemy, i)=>{
+if(ISCrucialcollision(enemy,DistroyBlock)){
+if(i > -1){
+
+
+
+player.losin=true
+allINFO[0].score--;
+player.health--;
+enemies.splice(i,1)
+setTimeout(()=>{
+player.losin=false;
+},800);
+
+}
+EnemiesIsScapeCount++;
+}
+})
+
+
+
+
+
+
+if(movin.goin===true && IScollision(mouse,leftPad)){
+movin.left=true;
+movin.right=false;
+}
+else if(movin.goin===true && IScollision(mouse,rightPad)){
+movin.right=true;
+movin.left=false;
+}else{
+movin.right=false;
+movin.left=false;
+}
+
+
+
+enemies.forEach((enemy,i)=>{
+
+
+if(ISCrucialcollision(enemy,player)){
+
+if(!player.losin){
+if(i > -1){
+
+arrowsAdds(enemy.x,enemy.y,enemy.color);
+
+player.losin=true
+allINFO[0].score--;
+player.health--;
+enemies.splice(i,1)
+setTimeout(()=>{
+player.losin=false;
+},800);
+}
+}
+}
+})
 
 
 
@@ -231,153 +391,100 @@ player.x = -10;
 //shoot and desipair
 
 
-//enemies.forEach((enemy,i)=>{})
 
 
 
 enemies.forEach((enemy, index)=>{
 
-enemy.update();
-enemy.speed.y = 1.8;
-
-handleEnemiesParlicles(enemy.x+enemy.width/1.8, enemy.x+enemy.width/1.8 ,enemy.y);
-
-
-
-
-
-
-if(IScollision(enemy,player) || IScollision(enemy,DistroyBlock)){
-console.log('enemies has Distroy');
-
-if(!player.losin){
-
-player.losin=true
-player.health--
-setTimeout(()=>{
-player.losin=false
-},1500);
-
-}
-
-
-
-
-EnemiesIsScapeCount++;
-
-allINFO[0].score--;
 
 if(index > -1){
-enemies.splice(index, 1);
-enemiesParlicles.pop(enemiesParlicles.length)
+if(enemy.radius <= 10){
+enemies.splice(index,1);
 }
-
 }
+arrows.forEach((arrow,arrowIndex)=>{
+if(ISCrucialcollision(arrow,enemy)){
+let mm=0,mn=5;
+if(index > -1){
+if(arrowIndex > -1){
 
+//small enemies
 
-arrows.forEach((arrow, arrowIndex)=>{
+arrowsAdds(enemy.x,enemy.y,enemy.color);
 
-if(IScollision(enemy,arrow)){
-
+if(enemy.radius > 10 && mm==0){
+for(let i=0;i<10;i++){
+mn -= 1;
+enemy.radius -= 1;
+if(i >=9){
+break;
+mn=5;
+}
+}
+setTimeout(()=>{
+arrows.splice(arrowIndex, 1);
+allINFO[0].score+=1;
+},0)
+}
+//else prat
+else{
+if(index > -1){
+if(arrowIndex > -1){
 setTimeout(()=>{
 
-if(index > -1 && arrowIndex > -1){
-arrows.splice(arrowIndex, 1);
+arrowsAdds(enemy.x,enemy.y,enemy.color);
 
 enemies.splice(index, 1);
-
+arrows.splice(arrowIndex, 1);
 allINFO[0].score+=1;
-
-enemiesParlicles.pop(enemiesParlicles.length)
-
-//localStorage setup
-
 if(allINFO[0].score > hhiscore){
-
 hhiscore = allINFO[0].score;
-localStorage.setItem("hiscore", JSON.stringify(hhiscore))
-
-
+localStorage.setItem("hiscore", JSON.stringify(hhiscore));
+}
+},0)
 }
 }
-
-
-
-},30)
-
 }
-
-
+}
+}
+}
 })
-
 })
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+//level gen
 
 if(enemies.length <= CurrSwpanEnemiesCount && CurrSwpanEnemiesCount >= swpanEnemiesCount[levelCount].level && swpanEnemiesCount[levelCount].level < allINFO[0].score){
-
-
-//console.log(CurrSwpanEnemiesCount);
-//enemies.pop();
-
 if(levelCount >= swpanEnemiesCount.length -1){
-//window.cancelAnimationFrame(gameLoop)
-
-//let sr=document.querySelectorAll('script')
-
-
-
-
-//sr.forEach((s)=>{
-
-//body.removeChild(cvs)
-levelCount=0
-CurrSwpanEnemiesCount=0
-//allINFO[0].sorce=0
-
-
-//})
-
-
-
-
-
-//console.log('game over lol');
+levelCount=0;
+CurrSwpanEnemiesCount=0;
 }else{
-
-levelCount++
-//LevelUP=true;
-//console.log('LevelUP lol');
-
+levelCount++;
 }
-
 }
-
-
-
-
-
-
-
 
 //if player.health == 0 will gameOver
 
 if(player.health <= 0 && player.losin){
+cancelAnimationFrame(mainGameLoop);
+clearInterval(starSwpaning);
+clearInterval(enemieSwpaning);
+clearInterval(firing);
+stars.forEach(s=>s.speed.y=0);
+enemies.forEach(e=>e.speed.y=0);
+arrows.forEach(a=>a.speed.y=0);
+player.speed.x=0;
+console.log(' gameOver');
+pre.innerHTML=`
+
+game
+
+Over
+
+`;
 
 }
 
@@ -390,16 +497,19 @@ if(player.health <= 0 && player.losin){
 
 
 
+
+//DistroyBlock.update()
+
 //fes
 
 
 //set hiScore
 
 
-hue+=0.9
+//hue+=0.9
 //sorce and display
 
-pre.innerHTML=`score : ${allINFO[0].score} || Level:${levelCount +1}, Health: ${player.health}
+pre.innerHTML=`score : ${allINFO[0].score} || Level:${levelCount +1}, Health: ${player.health},
 Kill Traget: ${swpanEnemiesCount[levelCount].level} || enemies scape : ${EnemiesIsScapeCount}
 hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
@@ -417,7 +527,7 @@ hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
 
 
-    gameLoop()
+    gameLoop();
 
 
 
