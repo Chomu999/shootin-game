@@ -1,4 +1,4 @@
-const player = new NewShipFill(160,0,20, 'gold',10)
+const player = new NewCircleFill(160,0,20, 'gold',10)
 
 //const homeBlock = new NewBox(0,0,cvs.width*2,6,'#FF9000',100)
 
@@ -11,7 +11,7 @@ const playerBox = new NewBox(160,0,player.radius*2)
 const RightBlock = new NewBox(cvs.width+30,0,2,crr.canvas.height)
 
 
-const DistroyBlock=new NewShip(cvs.width/2,1400,cvs.width/2,'white')
+const DistroyBlock=new NewCircle(cvs.width/2,1400,cvs.width/2,'white')
 
 
 
@@ -99,6 +99,19 @@ function startGame(){
 
 reSize()
 
+player.health=10;
+allINFO[0].score=0;
+levelCount=0;
+
+
+
+enemies=[];
+//stars=[];
+arrows=[];
+booms=[];
+exposions=[];
+
+
 mainBox.removeChild(startBtn)
 
 
@@ -113,7 +126,7 @@ enemieSwpaning = setInterval(swpanEnemies, 1*900);
 
 
 
-firing = setInterval(fire, 1*300);
+firing = setInterval(fire, 1*280);
 
 
 // btnBox.appendChild(btnLeft)
@@ -159,7 +172,7 @@ star.speed.y = 0.8;
 stars.forEach((star, i)=>{
 
 
-if(ISCrucialcollision(star,DistroyBlock)){
+if(ISCircleCollision(star,DistroyBlock)){
 
 if(i > -1){
 
@@ -201,6 +214,7 @@ mouse.update()
 
 mouse.x = MOUSE.x;
 mouse.y = MOUSE.y;
+//mouse.color='red'
 
 
 
@@ -326,14 +340,14 @@ exposions.splice(i, 1)}
 
 
 enemies.forEach((enemy, i)=>{
-if(ISCrucialcollision(enemy,DistroyBlock)){
+if(ISCircleCollision(enemy,DistroyBlock)){
 if(i > -1){
 
 
 
 player.losin=true
 allINFO[0].score--;
-player.health--;
+player.health-=0.50;;
 enemies.splice(i,1)
 setTimeout(()=>{
 player.losin=false;
@@ -366,7 +380,7 @@ movin.left=false;
 enemies.forEach((enemy,i)=>{
 
 
-if(ISCrucialcollision(enemy,player)){
+if(ISCircleCollision(enemy,player)){
 
 if(!player.losin){
 if(i > -1){
@@ -375,7 +389,7 @@ arrowsAdds(enemy.x,enemy.y,enemy.color);
 
 player.losin=true
 allINFO[0].score--;
-player.health--;
+player.health-=0.50;
 enemies.splice(i,1)
 setTimeout(()=>{
 player.losin=false;
@@ -398,14 +412,23 @@ enemies.forEach((enemy, index)=>{
 
 
 if(index > -1){
+
 if(enemy.radius <= 10){
+
 enemies.splice(index,1);
+
 }
+
 }
+
 arrows.forEach((arrow,arrowIndex)=>{
-if(ISCrucialcollision(arrow,enemy)){
+
+if(ISCircleCollision(arrow,enemy)){
+
 let mm=0,mn=5;
+
 if(index > -1){
+
 if(arrowIndex > -1){
 
 //small enemies
@@ -413,42 +436,73 @@ if(arrowIndex > -1){
 arrowsAdds(enemy.x,enemy.y,enemy.color);
 
 if(enemy.radius > 10 && mm==0){
+
 for(let i=0;i<10;i++){
+
 mn -= 1;
+
 enemy.radius -= 1;
+
 if(i >=9){
+
 break;
+
 mn=5;
+
 }
+
 }
+
 setTimeout(()=>{
+
 arrows.splice(arrowIndex, 1);
 allINFO[0].score+=1;
+
 },0)
+
+    
 }
-//else prat
+//else part
 else{
+
 if(index > -1){
+
 if(arrowIndex > -1){
+
 setTimeout(()=>{
 
 arrowsAdds(enemy.x,enemy.y,enemy.color);
 
 enemies.splice(index, 1);
+
 arrows.splice(arrowIndex, 1);
+
 allINFO[0].score+=1;
+
 if(allINFO[0].score > hhiscore){
+
 hhiscore = allINFO[0].score;
+
 localStorage.setItem("hiscore", JSON.stringify(hhiscore));
+
 }
+
 },0)
+
 }
+
 }
+
 }
+
 }
+
 }
+
 }
+
 })
+
 })
 
 
@@ -458,17 +512,28 @@ localStorage.setItem("hiscore", JSON.stringify(hhiscore));
 //level gen
 
 if(enemies.length <= CurrSwpanEnemiesCount && CurrSwpanEnemiesCount >= swpanEnemiesCount[levelCount].level && swpanEnemiesCount[levelCount].level < allINFO[0].score){
+
 if(levelCount >= swpanEnemiesCount.length -1){
+
 levelCount=0;
+
 CurrSwpanEnemiesCount=0;
-}else{
-levelCount++;
+
 }
+
+else{
+
+levelCount++;
+player.health+=2;
+
+}
+
 }
 
 //if player.health == 0 will gameOver
 
 if(player.health <= 0 && player.losin){
+
 cancelAnimationFrame(mainGameLoop);
 clearInterval(starSwpaning);
 clearInterval(enemieSwpaning);
@@ -477,14 +542,13 @@ stars.forEach(s=>s.speed.y=0);
 enemies.forEach(e=>e.speed.y=0);
 arrows.forEach(a=>a.speed.y=0);
 player.speed.x=0;
-console.log(' gameOver');
-pre.innerHTML=`
+//console.log(' gameOver');
 
-game
 
-Over
 
-`;
+//mainBox.removeChild(startBtn)
+mainBox.appendChild(startBtn)
+startBtn.innerHTML=`<pre>game over \n tap to play aegin</pre>`
 
 }
 
@@ -509,8 +573,9 @@ Over
 //hue+=0.9
 //sorce and display
 
-pre.innerHTML=`score : ${allINFO[0].score} || Level:${levelCount +1}, Health: ${player.health},
-Kill Traget: ${swpanEnemiesCount[levelCount].level} || enemies scape : ${EnemiesIsScapeCount}
+pre.innerHTML=`score : ${allINFO[0].score} || <i style="color:#5400FF;">Level Name:${swpanEnemiesCount[levelCount].name}</i>, 
+<i style="color:#59B100;">Health: ${player.health}</i> ,Kill Traget: ${swpanEnemiesCount[levelCount].level} ||
+enemies scape : ${EnemiesIsScapeCount}
 hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
 //ctx.fillStyle='#0022FF';
