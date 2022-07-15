@@ -37,16 +37,17 @@ color:red;
 text-transform:capitalize;
 }
 
-p{
+p.startGame{
 padding:20px 20px;
 position:absolute;
+
 top:50%;left:50%;
 transform:translate(-50%,-50%);
 border:2px solid blue;
 text-transform:capitalize;
 color:purple;
 font-size:20px;
-
+text-align:center;
 }
 
 
@@ -57,17 +58,15 @@ font-size:20px;
 
 <div id="mainBox">
 
-
-
 <div id="miniBox">
+
 <pre>hello world</pre>
+
 <canvas id="cvs"></canvas>
 
 </div>
 
-
 <p class="startGame">tap to play</p>
-
 
 </div>
 
@@ -75,8 +74,6 @@ font-size:20px;
 <script src="./customFun.js"></script>
 <script src="./controll.js"></script>
 <script src="./main.js"></script>
- 
- 
 
 </body>
 </html>
