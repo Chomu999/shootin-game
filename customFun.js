@@ -40,7 +40,7 @@ this.y += this.speed.y;
 
 
 
-class NewShip{
+class NewCircle{
 constructor(x,y,radius,color='rgba(0,0,0,0)',health=1){
 
 this.x=x;
@@ -81,7 +81,7 @@ this.y += this.speed.y;
 
 
 
-class NewShipFill{
+class NewCircleFill{
 constructor(x,y,radius,color='rgba(0,0,0,0)',health=1){
 
 this.x=x;
@@ -278,22 +278,14 @@ function swpanEnemies(){
 
 let health=3;
 
-let size = randint(9,30)
+let size = randint(9,50)
 
 let x = randint(size,cvs.width -size);
 
-enemies.unshift(new NewShip(x, -player.radius,size,`hsl(${randint(0,360)},100%,50%,1)`,health));
+enemies.unshift(new NewCircle(x, -3*size,size,`hsl(${randint(0,360)},100%,50%,1)`,health));
 
 
 
-
-
-
-//enemies[CurrSwpanEnemiesCount].x=x
-
-//enemies.forEach((enemy, i)=>{
-
-//})
 
 
 
@@ -306,7 +298,7 @@ CurrSwpanEnemiesCount++;
 
 
 function fire(){
-arrows.unshift(new NewShip(
+arrows.unshift(new NewCircle(
     player.x,
     player.y,3,'white'
 ))
@@ -322,12 +314,9 @@ let gap=randint(-5,-20)
 
 let x=randint(0,cvs.width -gap)
 let y=randint(0, -cvs.height)
-let size=randint(2,player.radius/2)
+let size=randint(2,player.radius/4)
 
-stars.unshift(new NewShipFill(x+gap,y+gap,size,'rgba(255,255,255,0.2)'));
-
-
-
+stars.unshift(new NewCircleFill(x+gap,y+gap,size,'#A3B5B8'));
 
 
 }
@@ -373,7 +362,7 @@ ObjectA.y <= ObjectB.y + ObjectB.height)
 
 
 
-function ISCrucialcollision(ObjectA,ObjectB){
+function ISCircleCollision(ObjectA,ObjectB){
 
 
 let dist=Math.hypot(ObjectA.x - ObjectB.x, ObjectA.y - ObjectB.y)
@@ -451,8 +440,8 @@ crr.poartl.leftx= -50;
 crr.poartl.rightx= crr.canvas.width +30;
 
 
-crr.ctx.gap=crr.canvas.width/3;
-crr.ctx.width=crr.canvas.width/3;
+crr.ctx.width=crr.canvas.width/100 *45;
+
 
 
 crr.ctx.left.height = crr.canvas.height;
@@ -461,7 +450,7 @@ crr.ctx.left.y = 0;
 
 
 crr.ctx.right.height = crr.canvas.height;
-crr.ctx.right.x = crr.ctx.gap*2;
+crr.ctx.right.x = crr.canvas.width - crr.ctx.width;
 crr.ctx.right.y = 0;
 
 
@@ -488,15 +477,14 @@ MOUSE.y = crr.canvas.height/3 *2;
 crr.poartl.leftx= -50;
 crr.poartl.rightx= crr.canvas.width +30;
 
-crr.ctx.gap=crr.canvas.width/3;
-crr.ctx.width=crr.canvas.width/3;
+crr.ctx.width=crr.canvas.width/100 *45;
 
 crr.ctx.left.height = crr.canvas.height;
 crr.ctx.left.x = 0;
 crr.ctx.left.y = 0;
 
 crr.ctx.right.height = crr.canvas.height;
-crr.ctx.right.x = crr.ctx.gap*2;
+crr.ctx.right.x = crr.canvas.width - crr.ctx.width;
 crr.ctx.right.y = 0;
 
 
@@ -504,3 +492,4 @@ crr.ctx.right.y = 0;
 }
 
 }
+
