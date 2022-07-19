@@ -10,9 +10,12 @@ let startBtn=document.querySelector('.startGame');
 let pre=document.querySelector('pre');
 
 
+let cvs=document.querySelector("#cvs")
+let backgroundCvs=document.querySelector("#backgroundCvs")
+let controllCvs=document.querySelector("#controllCvs")
 
-let cvs=document.querySelector("canvas")
-
+let controllCtx = controllCvs.getContext("2d");
+let backgroundCtx = backgroundCvs.getContext("2d");
 let ctx = cvs.getContext("2d");
 
 
@@ -24,12 +27,19 @@ let mouseT=['mouseenter','mousemove','mouseup'];
 let btnBox,btnLeft,btnRight,mainGameLoop;
 
 
-let firing,enemieSwpaning,starSwpaning;
 
+let enemieSwpaning,starSwpaning;
+
+
+let firingSpeed=22;
+
+let lastTime=0;
+let enemiesTimer=0;
+let enemiesEnter=62;
 
 let gameSpeed=2;
 
-let playerParlicles=[];
+let allHealthBar=[];
 let enemies=[];
 let stars=[];
 let arrows=[];
@@ -54,9 +64,7 @@ let swpanEnemiesCount=[
 let CurrSwpanEnemiesCount=0;
 
 
-let allINFO=[
-
-{
+let allINFO={
 enemyKillTraget:0,
 score:0,
 enemySwpanRate:0
@@ -67,7 +75,6 @@ enemySwpanRate:0
 
 
 
-];
 
 
 let crr={
