@@ -1,6 +1,5 @@
+//makin player
 const player = new NewCircleFill(160,0,20, 'gold',10)
-
-//const homeBlock = new NewBox(0,0,cvs.width*2,6,'#FF9000',100)
 
 
 const LeftBlock = new NewBox(-30,0,2,crr.canvas.height)
@@ -11,29 +10,17 @@ const playerBox = new NewBox(160,0,player.radius*2)
 const RightBlock = new NewBox(cvs.width+30,0,2,crr.canvas.height)
 
 
+
+
 const DistroyBlock=new NewCircle(cvs.width/2,1400,cvs.width/2,'white')
 
 
 
-const leftPad=new NewBox(0,0,0)
+const leftPad=new NewBox(0,0,3)
 
-const rightPad=new NewBox(0,0,0)
+const rightPad=new NewBox(0,0,3)
 
 const mouse=new NewBox(0,0,10)
-
-
-
-
-
-
-//let parlicles=[]
-
-
-//local storage
-//console.log(localStorage)
-
-
-
 
 
 
@@ -43,8 +30,7 @@ const mouse=new NewBox(0,0,10)
 
 let hiscore=localStorage.getItem("hiscore")
 
-var hhiscore;
-
+let hhiscore;
 
 if(hiscore === null){
 
@@ -100,7 +86,7 @@ function startGame(){
 reSize()
 
 player.health=10;
-allINFO[0].score=0;
+allINFO.score=0;
 levelCount=0;
 
 
@@ -120,13 +106,13 @@ starSwpaning = setInterval(swpanStars, 2*1000)
 
 
 
-enemieSwpaning = setInterval(swpanEnemies, 1*900);
+//enemieSwpaning = setInterval(swpanEnemies, 1*900);
 
 
 
 
 
-firing = setInterval(fire, 1*280);
+//firing = setInterval(fire, 1*280);
 
 
 // btnBox.appendChild(btnLeft)
@@ -142,15 +128,50 @@ miniBox.requestFullscreen()
 
 
 
+//let then = Date.now();
+let now=0;
 
 
 function gameLoop(){
 
 mainGameLoop = requestAnimationFrame(gameLoop)
 
+
+enemiesTimer++
+if(enemiesTimer >= enemiesEnter +1){
+enemiesTimer=0
+}
+
+
+now++
+if(now >= firingSpeed +1){
+now=0
+}
+
+
+
+
+
+
 //ctx.clearRect(0,0,cvs.width,cvs.height)
-ctx.fillStyle='rgba(0,0,0,0.18)';
+
+
+
+
+
+
+backgroundCtx.fillStyle='rgba(0,0,0,1)';
+backgroundCtx.fillRect(0,0,cvs.width,cvs.height)
+
+ctx.fillStyle='rgba(8,8,80,0.38)';
 ctx.fillRect(0,0,cvs.width,cvs.height)
+
+
+
+
+
+controllCtx.fillStyle='rgba(0,0,0,0)';
+controllCtx.fillRect(0,0,cvs.width,cvs.height)
 
 
 
@@ -161,6 +182,7 @@ ctx.fillRect(0,0,cvs.width,cvs.height)
 
 stars.forEach((star,i)=>{
 
+star.draw(backgroundCtx);
 star.update();
 star.speed.y = 0.8;
 
@@ -192,6 +214,7 @@ stars.splice(i,1)
 
 
 
+leftPad.draw(controllCtx);
 leftPad.update();
 
 leftPad.width= crr.ctx.width;
@@ -200,6 +223,7 @@ leftPad.x= crr.ctx.left.x;
 leftPad.y= crr.ctx.left.y;
 
 
+rightPad.draw(controllCtx)
 rightPad.update()
 
 rightPad.width= crr.ctx.width;
@@ -210,6 +234,7 @@ rightPad.y= crr.ctx.right.y;
 
 //
 
+mouse.draw(controllCtx)
 mouse.update()
 
 mouse.x = MOUSE.x;
@@ -223,9 +248,11 @@ mouse.y = MOUSE.y;
 //controlin code here
 
 //update the playerBox
+playerBox.draw(ctx)
 playerBox.update()
 
 //update the player
+player.draw(ctx);
 player.update();
 player.y = crr.playerY;
 
@@ -257,17 +284,21 @@ player.speed.x = 0;
 
 //enemies function
 
+fire(now,firingSpeed)
+swpanEnemies(enemiesTimer,enemiesEnter)
+
 
 
 
 arrows.forEach((arrow)=>{
 
-arrow.speed.y = -3.80
+arrow.speed.y = -3.80;
+arrow.draw(ctx);
 arrow.update();
 
 })
 
-if(arrows.length >= 60)arrows.pop()
+if(arrows.length >= 60)arrows.pop();
 
 
 
@@ -277,9 +308,14 @@ if(arrows.length >= 60)arrows.pop()
 
 
 
-LeftBlock.update()
-RightBlock.update()
-DistroyBlock.update()
+LeftBlock.draw(ctx);
+LeftBlock.update();
+
+RightBlock.draw(ctx);
+RightBlock.update();
+
+DistroyBlock.draw(ctx);
+DistroyBlock.update();
 
 
 
@@ -311,6 +347,13 @@ DistroyBlock.y=crr.canvas.height*2;
 
 
 
+//healthUI(player.health,'green',player.x,player.y,player.width,player.height)
+
+
+
+
+
+
 
 
 //update the enemiesBoxs
@@ -318,17 +361,27 @@ DistroyBlock.y=crr.canvas.height*2;
 
 //update the enemies
 
+
+
 enemies.forEach((enemy, i)=>{
+enemy.draw(ctx);
 enemy.update();
 enemy.speed.y = 2.4;
+
+
+
 })
 
+
+
+
 exposions.forEach((epols, i)=>{
+epols.draw(ctx);
 epols.update();
 //enemy.speed.y = 2.4;
 
 
-if(epols.size <= 1){
+if(epols.radius <= 0.4){
 exposions.splice(i, 1)}
 
 })
@@ -338,24 +391,30 @@ exposions.splice(i, 1)}
 
 
 
-
 enemies.forEach((enemy, i)=>{
+
 if(ISCircleCollision(enemy,DistroyBlock)){
+
 if(i > -1){
 
+player.losin=true;
 
+allINFO.score--;
 
-player.losin=true
-allINFO[0].score--;
-player.health-=0.50;;
-enemies.splice(i,1)
+player.health-=0.50;
+
+enemies.splice(i,1);
+
 setTimeout(()=>{
 player.losin=false;
 },800);
 
 }
+
 EnemiesIsScapeCount++;
+
 }
+
 })
 
 
@@ -363,11 +422,11 @@ EnemiesIsScapeCount++;
 
 
 
-if(movin.goin===true && IScollision(mouse,leftPad)){
+if(movin.goin && IScollision(mouse,leftPad)){
 movin.left=true;
 movin.right=false;
 }
-else if(movin.goin===true && IScollision(mouse,rightPad)){
+else if(movin.goin && IScollision(mouse,rightPad)){
 movin.right=true;
 movin.left=false;
 }else{
@@ -383,20 +442,31 @@ enemies.forEach((enemy,i)=>{
 if(ISCircleCollision(enemy,player)){
 
 if(!player.losin){
+
 if(i > -1){
 
-arrowsAdds(enemy.x,enemy.y,enemy.color);
+arrowsAdds(enemy.x,enemy.y,enemy.radius,enemy.color);
 
-player.losin=true
-allINFO[0].score--;
+player.losin=true;
+
+allINFO.score--;
+
 player.health-=0.50;
-enemies.splice(i,1)
+
+enemies.splice(i,1);
+
 setTimeout(()=>{
+
 player.losin=false;
+
 },800);
+
 }
+
 }
+
 }
+
 })
 
 
@@ -425,73 +495,28 @@ arrows.forEach((arrow,arrowIndex)=>{
 
 if(ISCircleCollision(arrow,enemy)){
 
-let mm=0,mn=5;
 
 if(index > -1){
 
 if(arrowIndex > -1){
 
 //small enemies
+if(enemy.radius > 10){
 
-arrowsAdds(enemy.x,enemy.y,enemy.color);
+arrowsAdds(enemy.x,enemy.y,enemy.radius,enemy.color);
 
-if(enemy.radius > 10 && mm==0){
+enemy.radius -= 10;
 
-for(let i=0;i<10;i++){
 
-mn -= 1;
-
-enemy.radius -= 1;
-
-if(i >=9){
-
-break;
-
-mn=5;
-
-}
-
-}
 
 setTimeout(()=>{
 
 arrows.splice(arrowIndex, 1);
-allINFO[0].score+=1;
+arrowsAdds(arrow.x,arrow.y,arrow.radius,arrow.color)
+allINFO.score+=1;
 
 },0)
 
-    
-}
-//else part
-else{
-
-if(index > -1){
-
-if(arrowIndex > -1){
-
-setTimeout(()=>{
-
-arrowsAdds(enemy.x,enemy.y,enemy.color);
-
-enemies.splice(index, 1);
-
-arrows.splice(arrowIndex, 1);
-
-allINFO[0].score+=1;
-
-if(allINFO[0].score > hhiscore){
-
-hhiscore = allINFO[0].score;
-
-localStorage.setItem("hiscore", JSON.stringify(hhiscore));
-
-}
-
-},0)
-
-}
-
-}
 
 }
 
@@ -511,9 +536,9 @@ localStorage.setItem("hiscore", JSON.stringify(hhiscore));
 
 //level gen
 
-if(enemies.length <= CurrSwpanEnemiesCount && CurrSwpanEnemiesCount >= swpanEnemiesCount[levelCount].level && swpanEnemiesCount[levelCount].level < allINFO[0].score){
+if(enemies.length <= CurrSwpanEnemiesCount && CurrSwpanEnemiesCount >= swpanEnemiesCount[levelCount].level && swpanEnemiesCount[levelCount].level < allINFO.score){
 
-if(levelCount >= swpanEnemiesCount.length -1){
+if(levelCount > swpanEnemiesCount.length-1){
 
 levelCount=0;
 
@@ -530,14 +555,52 @@ player.health+=2;
 
 }
 
+
+
+
+
+if(allINFO.score > hhiscore){
+
+localStorage.setItem("hiscore", JSON.stringify(allINFO.score))
+
+
+
+}else{
+
+hhiscore = JSON.parse(hiscore);
+
+}
+
+
+
 //if player.health == 0 will gameOver
 
 if(player.health <= 0 && player.losin){
 
 cancelAnimationFrame(mainGameLoop);
+
 clearInterval(starSwpaning);
-clearInterval(enemieSwpaning);
-clearInterval(firing);
+
+
+stars.forEach(s=>s.speed.y=0);
+enemies.forEach(e=>e.speed.y=0);
+arrows.forEach(a=>a.speed.y=0);
+player.speed.x=0;
+
+
+
+mainBox.appendChild(startBtn)
+startBtn.innerHTML=`<pre>game over \n tap to play aegin</pre>`
+
+}
+
+else if(allINFO.score >= swpanEnemiesCount[9].level){
+
+cancelAnimationFrame(mainGameLoop);
+
+clearInterval(starSwpaning);
+
+
 stars.forEach(s=>s.speed.y=0);
 enemies.forEach(e=>e.speed.y=0);
 arrows.forEach(a=>a.speed.y=0);
@@ -548,9 +611,11 @@ player.speed.x=0;
 
 //mainBox.removeChild(startBtn)
 mainBox.appendChild(startBtn)
-startBtn.innerHTML=`<pre>game over \n tap to play aegin</pre>`
+startBtn.innerHTML=`<pre>You Won \n tap to play aegin</pre>`
 
 }
+
+
 
 
 
@@ -573,7 +638,7 @@ startBtn.innerHTML=`<pre>game over \n tap to play aegin</pre>`
 //hue+=0.9
 //sorce and display
 
-pre.innerHTML=`score : ${allINFO[0].score} || <i style="color:#5400FF;">Level Name:${swpanEnemiesCount[levelCount].name}</i>, 
+pre.innerHTML=`score : ${allINFO.score} || <i style="color:#5400FF;">Level Name:${swpanEnemiesCount[levelCount].name}</i>, 
 <i style="color:#59B100;">Health: ${player.health}</i> ,Kill Traget: ${swpanEnemiesCount[levelCount].level} ||
 enemies scape : ${EnemiesIsScapeCount}
 hiScore : ${hhiscore} Tap to Full-Screen mod`;
@@ -585,15 +650,14 @@ hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
 
 
-
 }
 
 
 
 
 
-    gameLoop();
+//cvs.onload = setInterval(gameLoop,500);
 
-
+gameLoop()
 
 }
