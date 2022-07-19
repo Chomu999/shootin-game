@@ -55,7 +55,7 @@ draw(ctx){
 ctx.beginPath()
 //ctx.fillStyle=this.color;
 ctx.strokeStyle=this.color;
-ctx.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
+ctx.arc(this.x,this.y,this.radius,0,Math.PI * 2);
 //ctx.fill()
 ctx.stroke()
 ctx.closePath()
@@ -127,46 +127,6 @@ this.y += this.speed.y;
 
 
 //
-
-class Parlicle{
-constructor(left,right,y){
-
-this.left=left;
-this.right=right;
-
-
-this.y=y;
-this.size=randint(1,4);
-this.colorAlpha=randint(1,999);
-this.color=`rgba(255,255,255,0.${this.colorAlpha}`;
-this.speed={x:0,y:0};
-}
-draw(){
-ctx.fillStyle=this.color;
-ctx.beginPath();
-//for left smoke
-ctx.arc(this.left,this.y,this.size,0,Math.PI * 2);
-
-//for right smoke
-ctx.arc(this.right,this.y,this.size,0,Math.PI * 2);
-
-ctx.fill();
-}
-
-update(){
-    
-this.draw()
-//this.y += gameSpeed;
-//this.speed.y -= this.weight
-this.x += this.speed.x
-
-
-
-if(this.size >= 0.3){ this.size += 0.14}
-
-}
-
-}
 
 
 // arrow system
@@ -327,29 +287,6 @@ arrows.unshift(new NewCircle(
 
 
 
-function healthUI(health,color,x,y,width,height){
-
-ctx.save()
-ctx.beginPath()
-//ctx.translate(x-width, y-height);
-
-//ctx.fillStyle='#FF0002'
-//ctx.fillRect(0,0,200,200);
-
-
-ctx.fillStyle=color
-for(let i=0; i < health; i++) {
-ctx.fillRect(i*8,0,width/10,0);
-
-}
-
-
-ctx.closePath()
-ctx.restore()
-}
-
-
-
 function swpanStars(){
 
 for(let i=0;i < randint(10,30);i++){
@@ -466,12 +403,12 @@ if(mw <= mh){
 
 
 
-cvs.width= fw*90;
+cvs.width= fw*80;
 cvs.height= fh*85;
 
 
-backgroundCvs.width=cvs.width
-backgroundCvs.height=cvs.height
+//backgroundCvs.width=cvs.width
+//backgroundCvs.height=cvs.height
 
 controllCvs.width=cvs.width
 controllCvs.height=cvs.height
@@ -489,39 +426,59 @@ crr.canvas.y=cvs.getBoundingClientRect().y
 
 crr.distroyY= cvs.height*1 + 60;
 crr.playerY= cvs.height/100 * 90;
-crr.homeY= cvs.height/100 * 100;
 
 
 MOUSE.y = crr.canvas.height/3 *2;
 
-crr.poartl.leftx= -50;
-crr.poartl.rightx= crr.canvas.width +30;
 
 
-crr.ctx.width=crr.canvas.width/100 *45;
+LeftBlock.height=crr.canvas.height;
+LeftBlock.x=  -50;
+
+
+RightBlock.height=crr.canvas.height;
+RightBlock.x= crr.canvas.width + 30;
 
 
 
-crr.ctx.left.height = crr.canvas.height;
-crr.ctx.left.x = 0;
-crr.ctx.left.y = 0;
 
 
-crr.ctx.right.height = crr.canvas.height;
-crr.ctx.right.x = crr.canvas.width - crr.ctx.width;
-crr.ctx.right.y = 0;
+leftPad.width= cvs.width/100 *45;
+leftPad.height= cvs.height
+leftPad.x= 0
+leftPad.y= 0
+
+
+
+
+rightPad.width= cvs.width/100 *45;
+rightPad.height= cvs.height;
+rightPad.x= cvs.width - rightPad.width;
+rightPad.y= 0
+
+
+
+
+
+
+DistroyBlock.radius=crr.canvas.width/2;
+DistroyBlock.x=crr.canvas.width/2;
+DistroyBlock.y=crr.canvas.height*2;
+
+
+
 
 
 
 }else{
 
-cvs.width= fw*60;
-cvs.height= fh*90;
+cvs.width= fw*80;
+cvs.height= fh*80;
 
 
 
-backgroundCvs.width=cvs.width
-backgroundCvs.height=cvs.height
+//backgroundCvs.width=cvs.width
+//backgroundCvs.height=cvs.height
 
 controllCvs.width=cvs.width
 controllCvs.height=cvs.height
@@ -536,25 +493,33 @@ crr.canvas.x=cvs.getBoundingClientRect().x
 crr.canvas.y=cvs.getBoundingClientRect().y
 
 
-crr.distroyY= cvs.height*1 + 60;
-crr.playerY= cvs.height/100 * 80;
-crr.homeY= cvs.height/100 * 100;
+crr.distroyY= crr.canvas.height*1 + 60;
+crr.playerY= crr.canvas.height/100 * 80;
+//crr.homeY= crr.canvas.height/100 * 100;
 
 MOUSE.y = crr.canvas.height/3 *2;
 
-crr.poartl.leftx= -50;
-crr.poartl.rightx= crr.canvas.width +30;
 
-crr.ctx.width=crr.canvas.width/100 *45;
 
-crr.ctx.left.height = crr.canvas.height;
-crr.ctx.left.x = 0;
-crr.ctx.left.y = 0;
+LeftBlock.height=crr.canvas.height;
+LeftBlock.x=  -50;
 
-crr.ctx.right.height = crr.canvas.height;
-crr.ctx.right.x = crr.canvas.width - crr.ctx.width;
-crr.ctx.right.y = 0;
 
+RightBlock.height=crr.canvas.height;
+RightBlock.x= crr.canvas.width + 30;
+
+
+
+leftPad.width= cvs.width/100 *45;
+leftPad.height= cvs.height
+leftPad.x= 0
+leftPad.y= 0
+
+
+rightPad.width= cvs.width/100 *45;
+rightPad.height= cvs.height;
+rightPad.x= cvs.width - rightPad.width;
+rightPad.y= 0
 
 
 }
