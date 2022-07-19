@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>canvas game v0.0.5</title>
+<title>canvas game v0.1.0</title>
 <style>
 *{
 margin:0;
@@ -15,21 +15,30 @@ box-sizing:border-box;
 
 body{
 overflow:hidden;
+background-color:rgba(20,20,118,1);
 }
 
 #mainBox{
 margin:0;padding:0;
-background-color:#CBCBCB;
 }
 #miniBox{
-
+margin:auto;
+width:90vw;height:90vh;
+position:relative;
 }
 
 canvas{
-position:absolute;
+margin:auto;
+display:inline-block;
+position:absolute; 
+/*
+width:80vw;
+background-color:transparent;
 top:50%;left:50%;
-transform:translate(-50%,-50%);
+ transform:translate(-50%,-50%);
 border:2px solid blue;
+*/
+
 }
 
 pre{
@@ -51,7 +60,6 @@ text-align:center;
 }
 
 
-
 </style>
 </head>
 <body>
@@ -60,9 +68,12 @@ text-align:center;
 
 <div id="miniBox">
 
-<pre>hello world</pre>
+<pre>made by biswajit bhowmick</pre>
 
+<canvas id="backgroundCvs"></canvas>
 <canvas id="cvs"></canvas>
+<canvas id="controllCvs"></canvas>
+
 
 </div>
 
@@ -70,12 +81,10 @@ text-align:center;
 
 </div>
 
-<script src="./info.js"></script>
-<script src="./customFun.js"></script>
-<script src="./controll.js"></script>
-<script src="./main.js"></script>
+<script src="./js/info.js"></script>
+<script src="./js/customFun.js"></script>
+<script src="./js/controll.js"></script>
+<script src="./js/main.js"></script>
 
 </body>
 </html>
-
-
