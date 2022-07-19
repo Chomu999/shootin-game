@@ -119,10 +119,11 @@ break;
 
 
 pre.addEventListener('dblclick',()=>{
-miniBox.requestFullscreen()
+mainBox.requestFullscreen()
 })
 
 
 
 window.addEventListener('resize',reSize);
+
 
