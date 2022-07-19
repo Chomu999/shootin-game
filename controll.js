@@ -4,7 +4,7 @@
 // touch input
 
 
-cvs.addEventListener(touch[0],(e)=>{
+controllCvs.addEventListener(touch[0],(e)=>{
 MOUSE.x = e.touches[0].clientX - crr.canvas.x
 movin.goin = true;
 
@@ -12,14 +12,14 @@ movin.goin = true;
 
 
 
-cvs.addEventListener(touch[1],(e)=>{
+controllCvs.addEventListener(touch[1],(e)=>{
 MOUSE.x = e.touches[0].clientX - crr.canvas.x
 movin.goin = true;
 })
 
 
 
-cvs.addEventListener(touch[2],(e)=>{
+controllCvs.addEventListener(touch[2],(e)=>{
 movin.goin = false;
 })
 
@@ -27,20 +27,20 @@ movin.goin = false;
 //mouse input
 
 
-cvs.addEventListener(mouseT[0],(e)=>{
-MOUSE.x = e.offsetX
-MOUSE.y = e.offsetY
+controllCvs.addEventListener(mouseT[0],(e)=>{
+MOUSE.x = e.offsetX - crr.canvas.x
+MOUSE.y = e.offsetY - crr.canvas.y
 movin.goin = true;
 })
 
 
-cvs.addEventListener(mouseT[1],(e)=>{
-MOUSE.x = e.offsetX
-MOUSE.y = e.offsetY
+controllCvs.addEventListener(mouseT[1],(e)=>{
+MOUSE.x = e.offsetX - crr.canvas.x
+MOUSE.y = e.offsetY - crr.canvas.y
 movin.goin = true;
 })
 
-cvs.addEventListener(mouseT[2],(e)=>{
+controllCvs.addEventListener(mouseT[2],(e)=>{
 movin.goin = false;
 })
 
@@ -104,8 +104,16 @@ break;
 
 
 
+//fire system
 
 
+
+
+// document.addEventListener('click',()=>{
+
+// fire()
+
+// })
 
 
 
@@ -117,5 +125,4 @@ miniBox.requestFullscreen()
 
 
 window.addEventListener('resize',reSize);
-
 
