@@ -92,7 +92,7 @@ levelCount=0;
 
 
 enemies=[];
-//stars=[];
+stars=[];
 arrows=[];
 booms=[];
 exposions=[];
@@ -112,6 +112,20 @@ starSwpaning = setInterval(swpanStars, 2*1000)
 
 
 
+for(let i=0; i < randint(50,cvs.height);i++){
+
+let gap=randint(-5,-20)
+
+let x=randint(0,cvs.width - gap)
+let y=randint(0, cvs.height)
+let size=randint(2,player.radius/4)
+
+stars.unshift(new NewCircleFill(x - gap,y+gap,size,'#A3B5B8'));
+
+
+}
+
+
 //firing = setInterval(fire, 1*280);
 
 
@@ -121,7 +135,7 @@ starSwpaning = setInterval(swpanStars, 2*1000)
 
 //.style.display='none'
 
-miniBox.requestFullscreen()
+mainBox.requestFullscreen()
 
 
 //main LOOP function here
@@ -160,8 +174,8 @@ now=0
 
 
 
-backgroundCtx.fillStyle='rgba(0,0,0,1)';
-backgroundCtx.fillRect(0,0,cvs.width,cvs.height)
+//backgroundCtx.fillStyle='rgba(0,0,0,1)';
+//backgroundCtx.fillRect(0,0,cvs.width,cvs.height)
 
 ctx.fillStyle='rgba(8,8,80,0.38)';
 ctx.fillRect(0,0,cvs.width,cvs.height)
@@ -182,7 +196,7 @@ controllCtx.fillRect(0,0,cvs.width,cvs.height)
 
 stars.forEach((star,i)=>{
 
-star.draw(backgroundCtx);
+star.draw(ctx);
 star.update();
 star.speed.y = 0.8;
 
@@ -215,21 +229,11 @@ stars.splice(i,1)
 
 
 leftPad.draw(controllCtx);
-leftPad.update();
-
-leftPad.width= crr.ctx.width;
-leftPad.height= crr.ctx.left.height;
-leftPad.x= crr.ctx.left.x;
-leftPad.y= crr.ctx.left.y;
+//leftPad.update();
 
 
 rightPad.draw(controllCtx)
-rightPad.update()
-
-rightPad.width= crr.ctx.width;
-rightPad.height= crr.ctx.right.height;
-rightPad.x= crr.ctx.right.x;
-rightPad.y= crr.ctx.right.y;
+//rightPad.update()
 
 
 //
@@ -319,15 +323,6 @@ DistroyBlock.update();
 
 
 
-LeftBlock.height=crr.canvas.height;
-LeftBlock.x= crr.poartl.leftx;
-
-
-RightBlock.height=crr.canvas.height;
-RightBlock.x=crr.poartl.rightx;
-
-
-
 if(IScollision(playerBox,LeftBlock)){
 player.x = crr.canvas.width -10;
 }
@@ -336,13 +331,6 @@ player.x = crr.canvas.width -10;
 if(IScollision(playerBox,RightBlock)){
 player.x = -10;
 }
-
-
-
-
-DistroyBlock.radius=crr.canvas.width/2;
-DistroyBlock.x=crr.canvas.width/2;
-DistroyBlock.y=crr.canvas.height*2;
 
 
 
@@ -401,7 +389,7 @@ player.losin=true;
 
 allINFO.score--;
 
-player.health-=0.50;
+player.health-=0.5;
 
 enemies.splice(i,1);
 
@@ -605,11 +593,9 @@ stars.forEach(s=>s.speed.y=0);
 enemies.forEach(e=>e.speed.y=0);
 arrows.forEach(a=>a.speed.y=0);
 player.speed.x=0;
-//console.log(' gameOver');
 
 
 
-//mainBox.removeChild(startBtn)
 mainBox.appendChild(startBtn)
 startBtn.innerHTML=`<pre>You Won \n tap to play aegin</pre>`
 
@@ -621,31 +607,17 @@ startBtn.innerHTML=`<pre>You Won \n tap to play aegin</pre>`
 
 
 
-//if(stars.length >= 600) stars.pop()
-
-
-
-
 
 //DistroyBlock.update()
 
-//fes
 
 
-//set hiScore
 
-
-//hue+=0.9
-//sorce and display
 
 pre.innerHTML=`score : ${allINFO.score} || <i style="color:#5400FF;">Level Name:${swpanEnemiesCount[levelCount].name}</i>, 
-<i style="color:#59B100;">Health: ${player.health}</i> ,Kill Traget: ${swpanEnemiesCount[levelCount].level} ||
-enemies scape : ${EnemiesIsScapeCount}
+<i style="color:#59B100;">Health: ${player.health}</i> ,Kill Traget: ${swpanEnemiesCount[levelCount].level} || enemies scape : ${EnemiesIsScapeCount}
 hiScore : ${hhiscore} Tap to Full-Screen mod`;
 
-//ctx.fillStyle='#0022FF';
-//ctx.fillRect(cvs.width/2,0,1,cvs.height)
-//ctx.fillRect(0,cvs.height/2,cvs.width,1)
 
 
 
