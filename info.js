@@ -10,21 +10,25 @@ let startBtn=document.querySelector('.startGame');
 let pre=document.querySelector('pre');
 
 
-let cvs=document.querySelector("#cvs")
-let backgroundCvs=document.querySelector("#backgroundCvs")
-let controllCvs=document.querySelector("#controllCvs")
+const cvs=document.querySelector("#cvs");
+//let backgroundCvs=document.querySelector("#backgroundCvs");
 
-let controllCtx = controllCvs.getContext("2d");
-let backgroundCtx = backgroundCvs.getContext("2d");
-let ctx = cvs.getContext("2d");
+const controllCvs=document.querySelector("#controllCvs")
+
+const controllCtx = controllCvs.getContext("2d");
+
+//const backgroundCtx = backgroundCvs.getContext("2d");
+
+const ctx = cvs.getContext("2d");
 
 
 
 
 let touch=['touchstart','touchmove','touchend'];
-let mouseT=['mouseenter','mousemove','mouseup'];
+let mouseT=['mousedown','mousemove','mouseup'];
 
-let btnBox,btnLeft,btnRight,mainGameLoop;
+//let btnBox,btnLeft,btnRight,
+let mainGameLoop;
 
 
 
@@ -61,6 +65,8 @@ let swpanEnemiesCount=[
 
 ];
 
+
+
 let CurrSwpanEnemiesCount=0;
 
 
@@ -75,8 +81,6 @@ enemySwpanRate:0
 
 
 
-
-
 let crr={
 canvas:{
 width:0,
@@ -85,40 +89,13 @@ x:0,
 y:0,
 },
 
-ctx:{
-width:0,
 
-left:{
-height:0,
-x:0,
-y:0,
-},
-
-right:{
-height:0,
-x:0,
-y:0,
-},
-
-},
 
 distroyY:0,
 playerY:0,
-homeY:0,
-
-EnemiesParlicle:{
-left:0,
-right:0,
-y:0,
-},
 
 
-poartl:{
-leftx:0,
-rightx:0,
 
-
-},
 
 };
 
@@ -128,17 +105,10 @@ let levelCount=0;
 let EnemiesIsScapeCount=0;
 let LevelUP=false;
 
-let fireSpeed=300;
+let fireSpeed=270;
 let EnemiesSwpanSpeed=1000;
 
 
-
-
-
-//let sorce=0;
-let hue=0;
-let level=1;
-//let player;
 
 
 let movin={
@@ -158,47 +128,3 @@ y:undefined,
 
 
 
-
-//let iii = cvs.getBoundingClientRect().x;
-
-
-
-//cvs.width=window.innerWidth;
-//cvs.height=window.innerHeight;
-
-
-
-/*
-
-
-
-enemies.forEach((enemy, i)=>{
-
-
-projectiles.forEach((projectile, j)=>{
-
-//kill enemies
-
-let dist=Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
-
-if(dist - enemy.radius - projectile.radius < 1){
-
-setTimeout(()=>{
-
-if(i > -1){
-if(j > -1){
-
-enemies.splice(i, 1);
-projectiles.splice(j, 1);
-}
-}
-
-},0)}
-
-})
-
-})
-
-
-
-*/
