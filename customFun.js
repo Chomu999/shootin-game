@@ -14,7 +14,7 @@ this.speed={x:0,y:0};
 this.losin=false;
 this.health=health;
 }
-draw(){
+draw(ctx){
 
 ctx.fillStyle=this.color;
 ctx.fillRect(this.x,this.y,this.width,this.height);
@@ -25,7 +25,7 @@ ctx.fillRect(this.x,this.y,this.width,this.height);
 
 
 update(){
-this.draw();
+//this.draw();
 
 this.x += this.speed.x;
 this.y += this.speed.y;
@@ -51,7 +51,7 @@ this.speed={x:0,y:0};
 this.losin=false;
 this.health=health;
 }
-draw(){
+draw(ctx){
 ctx.beginPath()
 //ctx.fillStyle=this.color;
 ctx.strokeStyle=this.color;
@@ -67,7 +67,7 @@ ctx.closePath()
 
 
 update(){
-this.draw();
+//this.draw();
 
 this.x += this.speed.x;
 this.y += this.speed.y;
@@ -173,23 +173,25 @@ if(this.size >= 0.3){ this.size += 0.14}
 
 
 class Arrow{
-constructor(x,y,color){
+constructor(x,y,radius,color){
 this.x=x
 this.y=y
 this.color=color
-this.size=randint(2,10)
+this.radius=radius
 this.speed={x:Math.random() * 3 - 1.5 ,y:Math.random() * 3 - 1.5}
+this.alpha=1
 }
 draw(){
-
+ctx.save()
 ctx.beginPath();
 //ctx.fillStyle=this.color;
 ctx.strokeStyle=this.color;
-ctx.arc(this.x,this.y,this.size,45,Math.PI * 2,false)
+ctx.arc(this.x,this.y,this.radius,45,Math.PI * 2,false)
 //ctx.fill()
 ctx.stroke()
-
+ctx.globalAlpha=this.alpha
 ctx.closePath();
+ctx.restore()
 }
 
 update(){
@@ -199,19 +201,13 @@ this.x += this.speed.x
 this.y += this.speed.y
 
 
-if(this.size > 0.3){
-this.size -= 0.1;
-}
+if(this.radius > 0.3){
+this.radius -= 0.3;
+this.alpha -= 0.13;
 
 }
 
 
-}
-
-function arrowsAdds(x,y,color){
-
-for(let i=0;i<randint(10,19);i++){
-exposions.push(new Arrow(x,y,color))
 }
 }
 
@@ -240,20 +236,40 @@ exposions.push(new Arrow(x,y,color))
 
 
 
-function handlePlayerParlicles(left,right,y){
 
-playerParlicles.unshift(new Parlicle(left,right,y));
 
-playerParlicles.forEach((parlicle)=>{
-//ctx.fillStyle='rgba(255,175,55,1)'
-parlicle.update();
-parlicle.y += gameSpeed;
+function arrowsAdds(x,y,radius,color){
 
-})
-
-if(playerParlicles.length > 16){ playerParlicles.pop()}
-
+for(let i=0;i<randint(4,12);i++){
+let size=randint(2,radius/2)
+exposions.push(new Arrow(x,y,size,color))
 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -272,23 +288,20 @@ if(playerParlicles.length > 16){ playerParlicles.pop()}
 //handleParlicles()
 
 
-function swpanEnemies(){
+function swpanEnemies(time,cond){
 
 
-
+if(time >= cond){
 let health=3;
 
-let size = randint(9,50)
+let size = 10 * randint(3,7)
 
 let x = randint(size,cvs.width -size);
 
 enemies.unshift(new NewCircle(x, -3*size,size,`hsl(${randint(0,360)},100%,50%,1)`,health));
 
 
-
-
-
-
+}
 CurrSwpanEnemiesCount++;
 
 }
@@ -297,13 +310,43 @@ CurrSwpanEnemiesCount++;
 //fire fun
 
 
-function fire(){
+function fire(time,cond){
+
+if(time >= cond){
+
 arrows.unshift(new NewCircle(
     player.x,
     player.y,3,'white'
 ))
 }
 
+}
+
+
+
+
+
+
+function healthUI(health,color,x,y,width,height){
+
+ctx.save()
+ctx.beginPath()
+//ctx.translate(x-width, y-height);
+
+//ctx.fillStyle='#FF0002'
+//ctx.fillRect(0,0,200,200);
+
+
+ctx.fillStyle=color
+for(let i=0; i < health; i++) {
+ctx.fillRect(i*8,0,width/10,0);
+
+}
+
+
+ctx.closePath()
+ctx.restore()
+}
 
 
 
@@ -401,10 +444,16 @@ traget.addEventListener(condion,fun);
 //for reSize the window
 const reSize=()=>{
 
+//miniBox.style.width=window.innerWidth;
+//miniBox.style.height=window.innerHeight;
 
 
 let mw=window.innerWidth;
+//miniBox.getBoundingClientRect().window
 let mh=window.innerHeight;
+//miniBox.getBoundingClientRect().height
+
+
 let fw,fh;
 
 
@@ -415,8 +464,17 @@ fh= mh/100;
 
 if(mw <= mh){
 
+
+
 cvs.width= fw*90;
 cvs.height= fh*85;
+
+
+backgroundCvs.width=cvs.width
+backgroundCvs.height=cvs.height
+
+controllCvs.width=cvs.width
+controllCvs.height=cvs.height
 
 
 
@@ -459,6 +517,16 @@ crr.ctx.right.y = 0;
 
 cvs.width= fw*60;
 cvs.height= fh*90;
+
+
+
+backgroundCvs.width=cvs.width
+backgroundCvs.height=cvs.height
+
+controllCvs.width=cvs.width
+controllCvs.height=cvs.height
+
+
 
 
 crr.canvas.width = cvs.width;
