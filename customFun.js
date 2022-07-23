@@ -123,6 +123,68 @@ this.y += this.speed.y;
 
 
 
+//custom img draw function
+
+class NewSprite{
+constructor({imgSrc,x,y,frame=1,width=16,height=16,scale=1}){
+
+this.imgSrc=imgSrc;
+this.img=new Image();
+this.img.src=this.imgSrc;
+this.frame=frame;
+this.width=width;
+this.height=height;
+
+this.x=x;
+//- this.width/4;
+this.y=y;
+
+this.scale=scale;
+//- this.height/4;
+
+
+
+}
+draw(){
+ctx.beginPath()
+
+//ctx.drawImage(this.img,this.frame,0)
+
+
+
+ctx.drawImage(this.img,0,0,64,64,this.x,this.y,this.scale * this.width,this.scale * this.height)
+
+
+//ctx.fillStyle=this.color;
+//ctx.arc(this.x,this.y,this.radius,0,Math.PI * 2,false);
+//ctx.fill()
+ctx.closePath()
+
+
+}
+
+
+
+
+update(){
+this.draw();
+
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -139,7 +201,6 @@ this.y=y
 this.color=color
 this.radius=radius
 this.speed={x:Math.random() * 3 - 1.5 ,y:Math.random() * 3 - 1.5}
-this.alpha=1
 }
 draw(){
 ctx.save()
@@ -149,7 +210,6 @@ ctx.strokeStyle=this.color;
 ctx.arc(this.x,this.y,this.radius,45,Math.PI * 2,false)
 //ctx.fill()
 ctx.stroke()
-ctx.globalAlpha=this.alpha
 ctx.closePath();
 ctx.restore()
 }
@@ -163,7 +223,6 @@ this.y += this.speed.y
 
 if(this.radius > 0.3){
 this.radius -= 0.3;
-this.alpha -= 0.13;
 
 }
 
@@ -241,11 +300,50 @@ exposions.push(new Arrow(x,y,size,color))
 
 
 
+//const spaceShip=new Image();
+
+const bg=new Image();
+bg.src='./img/Parallax100.png'
+
+let BG={
+y1:0,
+y2:0,
+width:0,
+height:0
+}
 
 
 
 
-//handleParlicles()
+
+
+
+
+function handleBG(){
+
+if(BG.y1 >= BG.height + gameSpeed/2){
+
+BG.y1=0;
+BG.y2= -BG.height;
+
+}
+else{
+
+BG.y1 += gameSpeed/2;
+BG.y2 += gameSpeed/2;
+
+}
+
+
+ctx.drawImage(bg,0,BG.y1,BG.width,BG.height);
+
+
+ctx.drawImage(bg,0,BG.y2,BG.width,BG.height);
+
+}
+
+
+
 
 
 function swpanEnemies(time,cond){
@@ -253,16 +351,20 @@ function swpanEnemies(time,cond){
 
 if(time >= cond){
 let health=3;
+let tem=randint(1,4)
 
-let size = 10 * randint(3,7)
+let size = 10 * tem
 
 let x = randint(size,cvs.width -size);
 
 enemies.unshift(new NewCircle(x, -3*size,size,`hsl(${randint(0,360)},100%,50%,1)`,health));
 
 
-}
+
+
+
 CurrSwpanEnemiesCount++;
+}
 
 }
 
@@ -287,25 +389,6 @@ arrows.unshift(new NewCircle(
 
 
 
-function swpanStars(){
-
-for(let i=0;i < randint(10,30);i++){
-let gap=randint(-5,-20)
-
-let x=randint(0,cvs.width -gap)
-let y=randint(0, -cvs.height)
-let size=randint(2,player.radius/4)
-
-stars.unshift(new NewCircleFill(x+gap,y+gap,size,'#A3B5B8'));
-
-
-}
-
-
-}
-
-
-
 
 
 
@@ -323,7 +406,9 @@ return Math.floor(Math.random() * (max-min) + min)
 
 
 function DrawSpite(img,sX,sY,sW,sH,dX,dY,dW,dH){
+
 ctx.drawImage(img,sX,sY,sW,sH,dX,dY,dW,dH)
+
 }
 
 
@@ -403,8 +488,8 @@ if(mw <= mh){
 
 
 
-cvs.width= fw*80;
-cvs.height= fh*85;
+cvs.width= fw*100;
+cvs.height= fh*100;
 
 
 //backgroundCvs.width=cvs.width
@@ -422,6 +507,12 @@ crr.canvas.height = cvs.height;
 crr.canvas.x=cvs.getBoundingClientRect().x
 crr.canvas.y=cvs.getBoundingClientRect().y
 
+BG.width = cvs.width
+BG.height = cvs.height
+
+
+BG.y2 = -BG.height
+//BG.height = cvs.height
 
 
 crr.distroyY= cvs.height*1 + 60;
@@ -472,7 +563,7 @@ DistroyBlock.y=crr.canvas.height*2;
 
 }else{
 
-cvs.width= fw*80;
+cvs.width= fw*90;
 cvs.height= fh*80;
 
 
@@ -520,6 +611,9 @@ rightPad.width= cvs.width/100 *45;
 rightPad.height= cvs.height;
 rightPad.x= cvs.width - rightPad.width;
 rightPad.y= 0
+
+
+
 
 
 }
