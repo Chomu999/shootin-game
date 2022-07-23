@@ -7,7 +7,7 @@ let miniBox=document.getElementById('miniBox');
 
 let startBtn=document.querySelector('.startGame');
 
-let pre=document.querySelector('pre');
+let pre=document.querySelector('.gameStutes');
 
 
 const cvs=document.querySelector("#cvs");
@@ -31,6 +31,10 @@ let mouseT=['mousedown','mousemove','mouseup'];
 let mainGameLoop;
 
 
+const spaceShip='./spaceShipSheet.png'
+
+
+
 
 let enemieSwpaning,starSwpaning;
 
@@ -43,12 +47,12 @@ let enemiesEnter=62;
 
 let gameSpeed=2;
 
-let allHealthBar=[];
+let allShipBoxs=[];
 let enemies=[];
-let stars=[];
 let arrows=[];
-let booms=[];
 let exposions=[];
+
+
 
 
 let swpanEnemiesCount=[
