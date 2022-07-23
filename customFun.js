@@ -303,7 +303,7 @@ exposions.push(new Arrow(x,y,size,color))
 //const spaceShip=new Image();
 
 const bg=new Image();
-bg.src='./img/Parallax100.png'
+bg.src='./Parallax100.png'
 
 let BG={
 y1:0,
