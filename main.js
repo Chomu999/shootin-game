@@ -66,8 +66,7 @@ hhiscore = JSON.parse(hiscore);
 
 
 
-
-
+//let spaceShipT='./img/spaceShipSheet.png'
 
 
 
@@ -83,6 +82,8 @@ startBtn.addEventListener('click',startGame);
 function startGame(){
 
 
+mainBox.requestFullscreen()
+
 reSize()
 
 player.health=10;
@@ -92,9 +93,7 @@ levelCount=0;
 
 
 enemies=[];
-stars=[];
 arrows=[];
-booms=[];
 exposions=[];
 
 
@@ -102,40 +101,9 @@ mainBox.removeChild(startBtn)
 
 
 
-starSwpaning = setInterval(swpanStars, 2*1000)
 
 
 
-//enemieSwpaning = setInterval(swpanEnemies, 1*900);
-
-
-
-
-
-for(let i=0; i < randint(50,cvs.height);i++){
-
-let gap=randint(-5,-20)
-
-let x=randint(0,cvs.width - gap)
-let y=randint(0, cvs.height)
-let size=randint(2,player.radius/4)
-
-stars.unshift(new NewCircleFill(x - gap,y+gap,size,'#A3B5B8'));
-
-
-}
-
-
-//firing = setInterval(fire, 1*280);
-
-
-// btnBox.appendChild(btnLeft)
-// btnBox.appendChild(btnRight)
-// miniBox.appendChild(btnBox)
-
-//.style.display='none'
-
-mainBox.requestFullscreen()
 
 
 //main LOOP function here
@@ -177,50 +145,22 @@ now=0
 //backgroundCtx.fillStyle='rgba(0,0,0,1)';
 //backgroundCtx.fillRect(0,0,cvs.width,cvs.height)
 
-ctx.fillStyle='rgba(8,8,80,0.38)';
-ctx.fillRect(0,0,cvs.width,cvs.height)
+//handleBG()
+
+
+//controllCtx.fillStyle='rgba(0,0,0,0)';
+controllCtx.clearRect(0,0,cvs.width,cvs.height)
+
+
+//ctx.fillStyle='rgba(0,0,0,0.48)';
+ctx.clearRect(0,0,cvs.width,cvs.height)
 
 
 
 
 
-controllCtx.fillStyle='rgba(0,0,0,0)';
-controllCtx.fillRect(0,0,cvs.width,cvs.height)
+handleBG()
 
-
-
-//
-
-
-
-
-stars.forEach((star,i)=>{
-
-star.draw(ctx);
-star.update();
-star.speed.y = 0.8;
-
-
-})
-
-
-
-stars.forEach((star, i)=>{
-
-
-if(ISCircleCollision(star,DistroyBlock)){
-
-if(i > -1){
-
-stars.splice(i,1)
-
-}
-
-}
-
-
-
-})
 
 
 
@@ -261,13 +201,14 @@ player.update();
 player.y = crr.playerY;
 
 
+
 //moving between m0ve player as playerBox
 playerBox.x = player.x -player.radius;
 playerBox.y = player.y -player.radius;
 
 
 
-//achayl moving function
+//player moving function
 
 if(movin.left && !movin.right){
 player.speed.x = -movin.speed;
@@ -289,22 +230,24 @@ player.speed.x = 0;
 //enemies function
 
 fire(now,firingSpeed)
+
 swpanEnemies(enemiesTimer,enemiesEnter)
 
 
 
 
-arrows.forEach((arrow)=>{
+arrows.forEach((arrow,i)=>{
 
 arrow.speed.y = -3.80;
 arrow.draw(ctx);
 arrow.update();
 
+
+if(arrow.y <= 0 - arrow.radius){
+arrows.splice(i,1);
+}
+
 })
-
-if(arrows.length >= 60)arrows.pop();
-
-
 
 
 
@@ -335,56 +278,33 @@ player.x = -10;
 
 
 
-//healthUI(player.health,'green',player.x,player.y,player.width,player.height)
+
+exposions.forEach((epols, i)=>{
+epols.draw(ctx);
+epols.update();
+
+
+if(epols.radius <= 0.4)exposions.splice(i,1)
+
+})
 
 
 
-
-
-
-
-
-//update the enemiesBoxs
-
-
-//update the enemies
 
 
 
 enemies.forEach((enemy, i)=>{
+
 enemy.draw(ctx);
 enemy.update();
 enemy.speed.y = 2.4;
 
 
 
-})
-
-
-
-
-exposions.forEach((epols, i)=>{
-epols.draw(ctx);
-epols.update();
-//enemy.speed.y = 2.4;
-
-
-if(epols.radius <= 0.4){
-exposions.splice(i, 1)}
-
-})
-
-
-
-
-
-
-enemies.forEach((enemy, i)=>{
 
 if(ISCircleCollision(enemy,DistroyBlock)){
 
 if(i > -1){
-
 player.losin=true;
 
 allINFO.score--;
@@ -393,6 +313,8 @@ player.health-=0.5;
 
 enemies.splice(i,1);
 
+
+
 setTimeout(()=>{
 player.losin=false;
 },800);
@@ -400,10 +322,14 @@ player.losin=false;
 }
 
 EnemiesIsScapeCount++;
-
 }
 
 })
+
+
+
+
+
 
 
 
@@ -469,7 +395,9 @@ player.losin=false;
 enemies.forEach((enemy, index)=>{
 
 
+
 if(index > -1){
+
 
 if(enemy.radius <= 10){
 
@@ -477,12 +405,15 @@ enemies.splice(index,1);
 
 }
 
+
+
 }
+
 
 arrows.forEach((arrow,arrowIndex)=>{
 
-if(ISCircleCollision(arrow,enemy)){
 
+if(ISCircleCollision(arrow,enemy)){
 
 if(index > -1){
 
@@ -500,6 +431,7 @@ enemy.radius -= 10;
 setTimeout(()=>{
 
 arrows.splice(arrowIndex, 1);
+
 arrowsAdds(arrow.x,arrow.y,arrow.radius,arrow.color)
 allINFO.score+=1;
 
@@ -508,6 +440,8 @@ allINFO.score+=1;
 
 }
 
+
+
 }
 
 }
@@ -517,6 +451,8 @@ allINFO.score+=1;
 })
 
 })
+
+
 
 
 
@@ -567,10 +503,8 @@ if(player.health <= 0 && player.losin){
 
 cancelAnimationFrame(mainGameLoop);
 
-clearInterval(starSwpaning);
 
 
-stars.forEach(s=>s.speed.y=0);
 enemies.forEach(e=>e.speed.y=0);
 arrows.forEach(a=>a.speed.y=0);
 player.speed.x=0;
@@ -586,10 +520,7 @@ else if(allINFO.score >= swpanEnemiesCount[9].level){
 
 cancelAnimationFrame(mainGameLoop);
 
-clearInterval(starSwpaning);
 
-
-stars.forEach(s=>s.speed.y=0);
 enemies.forEach(e=>e.speed.y=0);
 arrows.forEach(a=>a.speed.y=0);
 player.speed.x=0;
